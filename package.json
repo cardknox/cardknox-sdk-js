@@ -1,0 +1,15 @@
+{
+  "name": "cardknox-sdk-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "start http://lh.cardknox.com:4000/request-ajax.html && light-server -s . -p 4000 -w \"*.js, *.html src/**\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "light-server": "^2.7.0"
+  }
+}
