@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-    <title>Bootstrap Example</title>
+    <title>SDK Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="src/index.js"></script>
+    <script src="/dist/index.min.js"></script>
     <script src="config.js"></script>
     <style>
         body {
@@ -60,7 +60,7 @@
 
     <div class="container">
 
-        <form id="form" >
+        <form id="form">
             <div class="col-md-6 col-md-offset-3">
                 <h2>Sample Payment (AJAX)</h2>
 
@@ -86,20 +86,22 @@
 
     <script>
         document.getElementsByName("xKey")[0].value = config.xKey;
-        
+
         var form = document.getElementById("form");
 
         form.addEventListener('submit', e => {
             e.preventDefault();
 
+            document.getElementById("response").innerHTML = "";
+
             window.formData = new FormData(form);
-            
-            console.log(formData)
-            
-            process(Object.fromEntries(formData.entries()), {
+
+            // console.log(formData)
+
+            processAsync(Object.assign(Object.fromEntries(formData.entries()), {
                 xDeviceType: config.xDeviceType,
                 xSerialNumber: config.xSerialNumber
-            }).then(r =>  document.getElementById("response").innerHTML = JSON.stringify(r));
+            })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r));
         })
     </script>
 
