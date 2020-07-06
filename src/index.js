@@ -1,26 +1,32 @@
 
+import requestSchema from './validateSchema';
+
 const GATEWAY_URL = 'https://x1.cardknox.com/gatewayjson';
 
 const softwareName = "cardknox-sdk-js";
 
 const utf8Decoder = new TextDecoder('utf-8');
 
-async function process(request, settings) {
+export async function processAsync(request) {
 
-    // validation and error handling here
     try {
-
         console.log(request);
+
+        // validation and error handling here
+        const errors = requestSchema.validate(request);
+
+        if (errors.length > 0)
+            throw errors[0].message;
 
         const verifyRequestBody = {
             xKey: request.xKey,
-            xVersion: '4.5.5',
+            xVersion: '4.5.8',
             xSoftwareName: softwareName + ': ' + request.xSoftwareName,
             xSoftwareVersion: request.xSoftwareVersion,
             xCommand: request.xCommand,
             xAmount: request.xAmount,
-            xDeviceType: settings.xDeviceType,
-            xSerialNumber: settings.xSerialNumber
+            xDeviceType: request.xDeviceType,
+            xSerialNumber: request.xSerialNumber
         };
 
         const verifyResponse = await fetch(GATEWAY_URL, {
@@ -32,6 +38,9 @@ async function process(request, settings) {
         }).then(r => r.json());
 
         console.log(verifyResponse);
+
+        if (verifyResponse.xError || !verifyResponse.xVerifyURL)
+            return verifyResponse;
 
         const deviceResponse = await fetch(verifyResponse.xVerifyURL);
 
@@ -66,3 +75,5 @@ async function process(request, settings) {
         }
     }
 }
+
+window.process = process;
