@@ -15,7 +15,7 @@ const requestSchema = new Schema({
     },
     xCommand: {
         type: String,
-        enum: ['cc:sale']
+        enum: ['cc:sale','cc:authonly']
     },
     xAmount: {
         type: Number,
@@ -28,7 +28,6 @@ const requestSchema = new Schema({
     },
     xSerialNumber: {
         type: String,
-        match: /^[0-9]+$/,
         required: true
     }
 }, { typecast: true });

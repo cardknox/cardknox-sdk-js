@@ -3,7 +3,8 @@ import requestSchema from './validateSchema';
 
 const GATEWAY_URL = 'https://x1.cardknox.com/gatewayjson';
 
-const softwareName = "cardknox-sdk-js";
+const SDKName = "cardknox-sdk-js";
+const SDKVersion = '1.0.0';
 
 const utf8Decoder = new TextDecoder('utf-8');
 
@@ -21,12 +22,14 @@ export async function processAsync(request) {
         const verifyRequestBody = {
             xKey: request.xKey,
             xVersion: '4.5.8',
-            xSoftwareName: softwareName + ': ' + request.xSoftwareName,
+            xSoftwareName: request.xSoftwareName,
             xSoftwareVersion: request.xSoftwareVersion,
             xCommand: request.xCommand,
             xAmount: request.xAmount,
             xDeviceType: request.xDeviceType,
-            xSerialNumber: request.xSerialNumber
+            xSerialNumber: request.xSerialNumber,
+            xSDKName: SDKName,
+            xSDKVersion: SDKVersion
         };
 
         const verifyResponse = await fetch(GATEWAY_URL, {
@@ -75,5 +78,3 @@ export async function processAsync(request) {
         }
     }
 }
-
-window.process = process;
