@@ -42,7 +42,7 @@ export async function processAsync(request) {
 
         console.log(verifyResponse);
 
-        if (verifyResponse.xError || !verifyResponse.xVerifyURL)
+        if (!verifyResponse.xVerifyURL)
             return verifyResponse;
 
         const deviceResponse = await fetch(verifyResponse.xVerifyURL);
