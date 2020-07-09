@@ -1,9 +1,8 @@
 
 import requestSchema from './validateSchema';
 
-const GATEWAY_URL = 'https://x1.cardknox.com/gatewayjson';
-
-const SDKName = "cardknox-sdk-js";
+const GatewayURL = 'https://x1.cardknox.com/gatewayjson';
+const SDKName = 'cardknox-sdk-js';
 const SDKVersion = '1.0.0';
 
 const utf8Decoder = new TextDecoder('utf-8');
@@ -32,7 +31,7 @@ export async function processAsync(request) {
             xSDKVersion: SDKVersion
         };
 
-        const verifyResponse = await fetch(GATEWAY_URL, {
+        const verifyResponse = await fetch(GatewayURL, {
             body: JSON.stringify(verifyRequestBody),
             headers: {
                 'Content-Type': 'application/json'
@@ -61,7 +60,7 @@ export async function processAsync(request) {
 
         const gatewayRequestBody = Object.assign({}, verifyRequestBody, { xDeviceResponse: encodedData });
 
-        const gatewayResponse = await fetch(GATEWAY_URL, {
+        const gatewayResponse = await fetch(GatewayURL, {
             body: JSON.stringify(gatewayRequestBody),
             method: 'POST'
         }).then(r => r.json());
