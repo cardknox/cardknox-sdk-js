@@ -1,6 +1,7 @@
 
 import requestSchema from './validateSchema';
-import { GATEWAY_URL as GatewayURL, SDK_NAME, SDK_VERSION } from './constants';
+import { GATEWAY_URL, SDK_NAME, SDK_VERSION } from './constants';
+import { Device as PaxDevice } from "./Pax";
 
 const utf8Decoder = new TextDecoder('utf-8');
 
@@ -28,7 +29,7 @@ export async function processAsync(request) {
             xSDKVersion: SDK_VERSION
         };
 
-        const verifyResponse = await fetch(GatewayURL, {
+        const verifyResponse = await fetch(GATEWAY_URL, {
             body: JSON.stringify(verifyRequestBody),
             headers: {
                 'Content-Type': 'application/json'
@@ -57,7 +58,7 @@ export async function processAsync(request) {
 
         const gatewayRequestBody = Object.assign({}, verifyRequestBody, { xDeviceResponse: encodedData });
 
-        const gatewayResponse = await fetch(GatewayURL, {
+        const gatewayResponse = await fetch(GATEWAY_URL, {
             body: JSON.stringify(gatewayRequestBody),
             method: 'POST'
         }).then(r => r.json());
@@ -73,4 +74,9 @@ export async function processAsync(request) {
             xError: error.toString()
         }
     }
+}
+
+export async function getSignature(deviceInfo) {
+    const signatureDevice = new PaxDevice(deviceInfo);
+    return await signatureDevice.signatureReader.getSignature();
 }
