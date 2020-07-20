@@ -117,7 +117,7 @@
 
             getSignature({serialNumber: '1', port: '10009'}).then(r => {
                 document.getElementById("response").innerHTML = JSON.stringify(r);
-                document.getElementById('sigimage').setAttribute('src', r);
+                document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
             }).catch(console.error);
         });
     </script>
