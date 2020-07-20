@@ -4,10 +4,11 @@
     "description": "",
     "main": "dist/index.min.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "echo \"TODO: create test\" && exit 0",
         "start": "start http://lh.cardknox.com:4000/request-ajax.html && light-server -s public -p 4000 -w \"public/**\"",
-        "watch": "webpack --watch",
-        "build": "webpack"
+        "watch": "webpack --config webpack.dev.config.js --watch",
+        "build-dev": "webpack --config webpack.dev.config.js",
+        "build": "webpack --config webpack.prod.config.js"
     },
     "author": "",
     "dependencies": {
@@ -16,6 +17,8 @@
     },
     "devDependencies": {
         "@babel/core": "^7.10.4",
+        "@babel/plugin-proposal-class-properties": "^7.10.4",
+        "@babel/plugin-syntax-class-properties": "^7.10.4",
         "@babel/plugin-transform-runtime": "^7.10.4",
         "@babel/preset-env": "^7.10.4",
         "babel-eslint": "^10.1.0",

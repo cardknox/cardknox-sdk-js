@@ -1,4 +1,12 @@
 {
     "parser": "babel-eslint",
-    "rules": {}
+    "rules": {
+        "indent": ["warn", 4],
+        "no-unused-vars" : ["warn"]
+    },
+    "extends": "eslint:recommended",
+    "env": {
+        "commonjs": true,
+        "browser": true
+    }
 }
