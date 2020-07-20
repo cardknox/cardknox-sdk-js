@@ -1,6 +1,5 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+
 
 module.exports = {
     entry: './src/index.js',
@@ -9,14 +8,7 @@ module.exports = {
         filename: 'index.min.js',
         libraryTarget: 'window'
     },
-    plugins: [
-        new CleanWebpackPlugin(),
-        new CopyPlugin({
-            patterns: [
-                { from: 'dist', to: '../public/scripts' },
-            ],
-        })
-    ],
+    plugins: [],
     module: {
         rules: [
             {
@@ -28,6 +20,5 @@ module.exports = {
                 ],
             }
         ]
-    },
-    mode: 'development'
+    }
 };
