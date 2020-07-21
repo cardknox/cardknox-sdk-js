@@ -75,15 +75,10 @@ export default class SignatureReader {
             }
         }
         ctx.stroke();
-        return canvas.toDataURL('image/png');           // to save to gateway, we need to strip the PNG header - 'data:image/png;base64,'
+        var image = canvas.toDataURL('image/png');
+        return image.replace('data:image/png;base64,', '');         // to save to gateway, we need to strip the PNG header
     }
 }
-
-async function getSignatureAndSaveToFile(filename){
-    const signature = await this.getSignature();
-    
-}
-
 
 class Point {
     constructor(point) {
