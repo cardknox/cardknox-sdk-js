@@ -1,0 +1,11 @@
+pull_request_rules:
+  - name: Update and Merge
+    conditions:
+      - "#approved-reviews-by>=1"
+      - label=automerge
+      - label!=donotmerge
+      - label!=wip
+    actions:
+      merge:
+        strict: smart 
+        method: squash
