@@ -6,5 +6,8 @@
     "env": {
         "commonjs": true,
         "browser": true
+    },
+    "globals": {
+        "Uint8Array": true
     }
 }
