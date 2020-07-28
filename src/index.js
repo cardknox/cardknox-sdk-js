@@ -1,7 +1,7 @@
 
 import requestSchema from './validateSchema';
 import { GATEWAY_URL, SDK_NAME, SDK_VERSION } from './constants';
-import { Device as PaxDevice } from "./Pax";
+import { Device as PaxDevice, SignatureReader, IpDeviceCommunicator, DeviceIpReader, CardReader } from "./Pax";
 
 const utf8Decoder = new TextDecoder('utf-8');
 
