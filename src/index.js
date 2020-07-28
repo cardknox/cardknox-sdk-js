@@ -1,7 +1,7 @@
 
 import requestSchema from './validateSchema';
 import { GATEWAY_URL, SDK_NAME, SDK_VERSION } from './constants';
-import { Device as PaxDevice, SignatureReader, IpDeviceCommunicator, DeviceIpReader, CardReader } from "./Pax";
+import { Device as PaxDevice, SignatureReader, IpDeviceCommunicator, DeviceIpReader } from "./Pax";
 
 const utf8Decoder = new TextDecoder('utf-8');
 
@@ -45,9 +45,9 @@ export async function processAsync(request) {
         const deviceResponse = await fetch(verifyResponse.xVerifyURL);
 
         const deviceResponseReader = deviceResponse.body.getReader();
-        let { value: chunk, done: readerDone } = await deviceResponseReader.read();
+        let { value: chunk } = await deviceResponseReader.read();
 
-        //handle !readerDone
+        //handle !readerDone    , done: readerDone
 
         chunk = chunk ? utf8Decoder.decode(chunk) : '';
         console.log(chunk);
