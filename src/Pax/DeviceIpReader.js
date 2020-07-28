@@ -1,14 +1,14 @@
 
-let ip = '10.166.110.129';
+let ip = '';
 
 export default class DeviceIpReader {
-    constructor(deviceInfo = {}) {
-        if (deviceInfo.ip)
-            ip = deviceInfo.ip;
-        else if (!deviceInfo.serialNumber)
+    constructor(settings = {}) {
+        if (settings.deviceIpAddress)
+            ip = settings.deviceIpAddress;
+        else if (!settings.deviceSerialNumber)
             throw 'Device serial number required';
 
-        this.serialNumber = deviceInfo.serialNumber;
+        this.serialNumber = settings.deviceSerialNumber;
     }
     getIP() {
 

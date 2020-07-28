@@ -76,7 +76,26 @@ export async function processAsync(request) {
     }
 }
 
-export async function getSignature(deviceInfo) {
-    const signatureDevice = new PaxDevice(deviceInfo);
-    return await signatureDevice.signatureReader.getSignature();
+/**
+ * 
+ * @typedef SignatureRequest
+ * @property {String} ip IP address of the device
+ * @property {String} port Device IP port 
+ * @property {String} serialNumber
+ */
+
+/**
+ * 
+ * @param {SignatureRequest} request 
+ * @returns {Promise<String>} base64-encoded PNG
+ * @description returns the image *without* the data header
+ */
+export async function getSignature(request) {
+    const ipReader = new DeviceIpReader(request);
+    const device = new PaxDevice({
+        signatureReader: new SignatureReader(
+            new IpDeviceCommunicator(ipReader.getIP(), request.deviceIpPort, 'http')
+        )
+    });
+    return await device.getSignature();
 }

@@ -1,17 +1,20 @@
 //Following logic in OOS3
 
-import SignatureReader from "./signatureReader";
-import DeviceIpReader from './DeviceIpReader';
 
 /**
  * @typedef Device
  */
 export default class Device {
+    constructor(options = {}) {
+        this.signatureReader = options.signatureReader;
+        this.cardReader = options.cardReader;
+    }
 
-    constructor(deviceInfo, options = {}) {
-        this.ipReader = options.IpReader ? options.IpReader : new DeviceIpReader(deviceInfo);
-        deviceInfo.ip = this.ipReader.getIP();
+    async getSignature() {
+        return await this.signatureReader.getSignature();
+    }
 
-        this.signatureReader = options.signatureReader ? options.signatureReader : new SignatureReader(deviceInfo);
+    async process(request) {
+        return await this.cardReader.process(request);
     }
 }
