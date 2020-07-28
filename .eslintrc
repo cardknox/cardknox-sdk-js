@@ -1,8 +1,6 @@
 {
     "parser": "babel-eslint",
     "rules": {
-        "indent": ["warn", 4],
-        "no-unused-vars" : ["warn"]
     },
     "extends": "eslint:recommended",
     "env": {
