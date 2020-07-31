@@ -23,7 +23,8 @@ export function STX_ETX_LRC(data) {
     const ret = [_STX];
     ret.push(...data);
     ret.push(_ETX);
-    ret.push(LRC(data));
+    const lrc = LRC(ret, 1);
+    ret.push(lrc);
     return Uint8Array.from(ret);
 }
 
@@ -35,8 +36,8 @@ export function STX_ETX_LRC(data) {
  * @returns {number}
  */
 export function LRC(data, leftOffset = 0, rightOffset = 0) {
-    let lrc = data[0];
-    for (let i = leftOffset + 1; i < data.length - rightOffset; i++)
+    let lrc = 0;
+    for (let i = leftOffset; i < data.length - rightOffset; i++)
         lrc ^= data[i];
 
     return lrc;
