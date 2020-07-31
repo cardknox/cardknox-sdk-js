@@ -1,4 +1,4 @@
-import { A09, RESPONSECODE_OK } from "./paxApi";
+import { A09_Response, RESPONSECODE_OK } from "./paxApi";
 
 
 const DO_SIGNATURE_HASH = 'AkEyMBwxLjI4HDAcHBwyMDADSw==';
