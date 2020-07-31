@@ -58,12 +58,6 @@ This returns a base64 encoded PNG *without the data header*.
         <td></td>
     </tr>
     <tr>
-        <td>xVersion</td>
-        <td>String</td>
-        <td>Cardknox Gateway version <br> Latest: <code>4.5.8</code></td>
-        <td></td>
-    </tr>
-    <tr>
         <td>xSoftwareName</td>
         <td>String</td>
         <td>Your software name</td>
