@@ -1,6 +1,5 @@
 
-const FS = '\u001c';
-export const RESPONSECODE_OK = '000000';
+import { FS } from "../core/core";
 
 export class A09_Response {
     constructor(response) {
