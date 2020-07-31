@@ -11,19 +11,28 @@ export default class SignatureReader {
     }
 
     async getSignature() {
-        const doSignatureResponse = await this.doSignature();
-        //parse response
+        try {
 
-        const getSignatureResponse = await this._getSignature();
+            await this.doSignature();
+            //parse response
 
-        const parsedResponse = new A09(getSignatureResponse);
+            const getSignatureResponse = await this._getSignature();
 
-        if (parsedResponse.responseCode !== RESPONSECODE_OK)
-            throw parsedResponse.responseMessage;
+            const parsedResponse = new A09_Response(getSignatureResponse);
 
-        const signatureImage = this.paxPointsToPNG(parsedResponse.signature);
+            if (parsedResponse.responseCode !== RESPONSECODE_OK)
+                throw parsedResponse.responseMessage;
 
-        return signatureImage;
+            const signatureImage = this.paxPointsToPNG(parsedResponse.signature);
+
+            return signatureImage;
+        } catch (error) {
+            return {
+                xResult: "E",
+                xStatus: "Error",
+                xError: error.toString()
+            }
+        }
     }
 
     async _getSignature() {     // prefixed as private to prevent usage as this is only part of the process
@@ -64,6 +73,6 @@ class Point {
             this.y = point.split(',')[1];
         }
     }
-    x = 0;              //to avoid undefind
+    x = 0;              // to avoid undefind
     y = 0;
 }
