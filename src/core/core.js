@@ -76,3 +76,39 @@ export function getDateyyyyMMddHHmmss(date) {
 export function padZeros(num, length) {
     return Array(Math.max(length - String(num).length + 1, 0)).join(0) + num;
 }
+
+// streams
+
+/**
+ * 
+ * @param {ReadableStreamDefaultReader} reader 
+ * @param {Uint8Array} prevChunk 
+ * @returns {Uint8Array}
+ */
+export async function readAll(reader, prevChunk) {
+    return await reader.read()
+        .then(({ done, value }) => {
+            if (done) {
+                reader.releaseLock();
+                return prevChunk;
+            }
+            else {
+                return readAll(reader, arrayBufferConcat(prevChunk, value));
+            }
+        });
+}
+
+// buffers
+
+/**
+ * 
+ * @param {Uint8Array} buffer1 
+ * @param {Uint8Array} buffer2 
+ * @returns {Uint8Array}
+ */
+export function arrayBufferConcat(buffer1, buffer2){
+    const tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+    tmp.set(new Uint8Array(buffer1), 0);
+    tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
+    return tmp;
+}
