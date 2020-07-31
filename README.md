@@ -8,13 +8,13 @@
 
 <table>
     <tr>
+        <th></th>
         <th>Args</th>
-        <td>request</td>
-        <td>TransactionRequest</td>
+        <th>Returns</th>
     </tr>
     <tr>
-        <th>Returns</th>
-        <td>response</td>
+        <th>Type</th>
+        <td>TransactionRequest</td>
         <td>TransactionResponse</td>
     </tr>
 </table>
@@ -29,13 +29,13 @@ This returns a base64 encoded PNG *without the data header*.
 
 <table>
     <tr>
+        <th></th>
         <th>Args</th>
-        <td>request</td>
-        <td>Settings</td>
+        <th>Returns</th>
     </tr>
     <tr>
-        <th>Returns</th>
-        <td>signature</td>
+        <th>Type</th>
+        <td>Settings</td>
         <td>String</td>
     </tr>
 </table>
