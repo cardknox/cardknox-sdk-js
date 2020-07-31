@@ -73,6 +73,6 @@ export function getDateyyyyMMddHHmmss(date) {
  * @param {number} length 
  * @returns {string}
  */
-function padZeros(num, length) {
+export function padZeros(num, length) {
     return Array(Math.max(length - String(num).length + 1, 0)).join(0) + num;
 }
