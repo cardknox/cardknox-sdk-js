@@ -1,4 +1,5 @@
-import { A09_Response, RESPONSECODE_OK } from "./signatureApi";
+import { A09_Response } from "./signatureApi";
+import { RESPONSECODE_OK } from "./constants";
 
 
 const DO_SIGNATURE_HASH = 'AkEyMBwxLjI4HDAcHBwyMDADSw==';
