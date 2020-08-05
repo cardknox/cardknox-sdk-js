@@ -1,7 +1,7 @@
 
 import { getDateyyyyMMddHHmmss, FS, US, STX_ETX_LRC } from "../core/core";
 import { ENUM_COMMAND_TYPE } from "../constants";
-import { API_VERSION } from "./constants";
+import { API_VERSION, RESPONSECODE_OK } from "./constants";
 
 /**
  * 
@@ -47,7 +47,7 @@ export function getTransactionCommand(request) {
 
 function getCommand({ xCommand }, enablePin) {
     if (xCommand.toLowerCase().indexOf('cc') >= 0)
-        if (enablePin)                  // add to validation?
+        if (enablePin)
             return 'T02';
         else
             return 'T00';
@@ -347,7 +347,13 @@ class ResponseAVSInformation {
  * 
  * @param {TransactionResponse} response 
  */
-export function convertToResponse(request, response){
+export function convertToResponse(request, response) {
+    if (response.responseCode !== RESPONSECODE_OK)
+        return {
+            xResult: "E",
+            xStatus: "Error",
+            xError: response.responseMessage
+        };
     return {
         xResult: 'A',
         xStatus: 'Approved',
@@ -361,8 +367,8 @@ export function convertToResponse(request, response){
         xMaskedCardNumber: response.accountInformation.account,
         xName: response.accountInformation.cardHolder,
         xRemainingBalance: response.amountInformation.balance1,
-        xRemainingBalanceEBTCB: request.xCommand.startsWith('ebt')? response.amountInformation.balance1 : '',
-        xRemainingBalanceEBTFS: request.xCommand.startsWith('ebt')? response.amountInformation.balance2 : '',
+        xRemainingBalanceEBTCB: request.xCommand.startsWith('ebt') ? response.amountInformation.balance1 : '',
+        xRemainingBalanceEBTFS: request.xCommand.startsWith('ebt') ? response.amountInformation.balance2 : '',
         xConvenienceFee: response.amountInformation.serviceFee,
         xCashbackAmount: response.amountInformation.cashbackAmount,
         xTip: response.amountInformation.tipAmount,
