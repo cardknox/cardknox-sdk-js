@@ -13,7 +13,6 @@ export default class SignatureReader {
 
     async getSignature() {
         try {
-
             const doSignatureResponse = new A21_Response(await this.doSignature());
             if (doSignatureResponse.responseCode !== RESPONSECODE_OK)
                 throw doSignatureResponse.responseMessage;
