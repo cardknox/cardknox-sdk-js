@@ -1,9 +1,5 @@
 
-import {
-    getTransactionCommand as getTransactionCommand_Pax,
-    TransactionResponse as TransactionResponse_Pax,
-    convertToResponse as convertToResponse_Pax
-} from "./transactionApi";
+import { getTransactionCommand, convertToResponse, TransactionResponse } from "./transactionApi";
 import { RESPONSECODE_OK } from "./constants";
 
 export default class CardReader {
@@ -15,13 +11,13 @@ export default class CardReader {
         try {
             this.validate(request);
 
-            const command = getTransactionCommand_Pax(request);
+            const command = getTransactionCommand(request);
             const deviceResponse = await this.ipDeviceCommunicator.getData(btoa(command));
-            const parsedResponse = new TransactionResponse_Pax(deviceResponse);
+            const parsedResponse = new TransactionResponse(deviceResponse);
 
             if (parsedResponse.responseCode !== RESPONSECODE_OK)
                 throw parsedResponse.responseMessage;
-            
+
             return this.convertToResponse(request, parsedResponse);
         } catch (error) {
             return {
@@ -48,6 +44,6 @@ export default class CardReader {
     }
 
     convertToResponse(request, response) {
-        return convertToResponse_Pax(request, response);
+        return convertToResponse(request, response);
     }
 }
