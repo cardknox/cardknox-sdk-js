@@ -18,7 +18,7 @@ export default class CardReader {
             if (parsedResponse.responseCode !== RESPONSECODE_OK)
                 throw parsedResponse.responseMessage;
 
-            return this.convertToResponse(request, parsedResponse);
+            return convertToResponse(request, parsedResponse);
         } catch (error) {
             return {
                 xResult: "E",
@@ -41,9 +41,5 @@ export default class CardReader {
         request.xCity = request.xCity || '';
         request.xEmail = request.xEmail || '';
         request.xRefnum = request.xRefnum || 0;
-    }
-
-    convertToResponse(request, response) {
-        return convertToResponse(request, response);
     }
 }
