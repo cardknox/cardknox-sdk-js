@@ -12,7 +12,7 @@ export default class IpDeviceCommunicator {
      * @param {string} command 
      * @returns {Promise<string>}
      */
-    async getData(command) {
+    getData = async (command) => {
         try {
             const response = await fetch(`${this.protocol}://${this.ip}:${this.port}?${command}`);
 
