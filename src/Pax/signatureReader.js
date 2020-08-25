@@ -1,4 +1,4 @@
-import { A09_Response } from "./signatureApi";
+import { A09_Response, A21_Response } from "./signatureApi";
 import { RESPONSECODE_OK } from "./constants";
 
 
@@ -13,14 +13,11 @@ export default class SignatureReader {
 
     async getSignature() {
         try {
+            const doSignatureResponse = new A21_Response(await this.doSignature());
+            if (doSignatureResponse.responseCode !== RESPONSECODE_OK)
+                throw doSignatureResponse.responseMessage;
 
-            await this.doSignature();
-            //parse response
-
-            const getSignatureResponse = await this._getSignature();
-
-            const parsedResponse = new A09_Response(getSignatureResponse);
-
+            const parsedResponse = new A09_Response(await this._getSignature());
             if (parsedResponse.responseCode !== RESPONSECODE_OK)
                 throw parsedResponse.responseMessage;
 
