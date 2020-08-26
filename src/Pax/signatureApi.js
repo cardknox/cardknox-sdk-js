@@ -3,6 +3,7 @@ import { FS } from "../core/core";
 
 export class A09_Response {
     constructor(response) {
+        response = response.substr(0, response.length - 2);
         const responseParts = response.split(FS);
 
         if (responseParts.length < 1) return;
@@ -22,5 +23,21 @@ export class A09_Response {
 
         if (responseParts.length < 8) return;
         this.signature = responseParts[7].trim();
+    }
+}
+
+export class A21_Response {
+    constructor(response) {
+        response = response.substr(0, response.length - 2);
+        const responseParts = response.split(FS);
+
+        if (responseParts.length < 1) return;
+        this.status = responseParts[0].trim();
+
+        if (responseParts.length < 4) return;
+        this.responseCode = responseParts[3].trim();
+
+        if (responseParts.length < 5) return;
+        this.responseMessage = responseParts[4].trim();
     }
 }
