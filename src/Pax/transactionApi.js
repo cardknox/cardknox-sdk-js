@@ -359,7 +359,7 @@ export function convertToResponse(request, response) {
         xStatus: 'Approved',
         xAuthCode: response.hostInformation.authCode,
         xCommand: request.xCommand,
-        xAuthAmount: response.amountInformation.approveAmount,
+        xAuthAmount: response.amountInformation.approveAmount / 100,
         xRefNum: response.hostInformation.hostReferenceNumber,
         xBatch: response.hostInformation.batchNumber,
         xAvsResult: response.avsInformation.message,
