@@ -10,7 +10,7 @@ export async function process(request) {
         const ipReader = new DeviceIpReader(request.settings);
         const device = new Device({
             cardReader: new PaxCardReader(
-                new IpDeviceCommunicator(ipReader.getIP(), request.settings.deviceIpPort, 'http')
+                new IpDeviceCommunicator(ipReader.getIP(), request.settings.deviceIpPort, request.settings.deviceIpProtocol || location.protocol)
             )
         });
         updateInProgress(request.settings.deviceIpAddress, device);
@@ -37,7 +37,7 @@ export async function getSignature(request) {
         const ipReader = new DeviceIpReader(request);
         const device = new Device({
             signatureReader: new PaxSignatureReader(
-                new IpDeviceCommunicator(ipReader.getIP(), request.deviceIpPort, 'http')
+                new IpDeviceCommunicator(ipReader.getIP(), request.deviceIpPort, request.deviceIpProtocol || location.protocol)
             )
         });
         updateInProgress(request.deviceIpAddress, device)
