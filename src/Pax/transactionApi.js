@@ -106,7 +106,7 @@ function getAmountInfo({ xAmount, xTip, xTax }, command) {
         case '03':
             return formatAmount(xAmount);
         case '02':
-            return [formatAmount(xAmount), formatAmount(xTax)].join(US);
+            return [formatAmount(xAmount)].join(US);
         case '06':
             return formatAmount(xAmount);
         case '10':
