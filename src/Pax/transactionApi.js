@@ -91,7 +91,7 @@ function getTransactionType({ xCommand }) {
     throw 'Unsupported command: ' + xCommand;
 }
 
-function getAmountInfo({ xAmount, xTip, xTax }, command) {
+function getAmountInfo({ xAmount, xTax }, command) {
     switch (command) {
         case '01':
         case '04':
@@ -106,7 +106,7 @@ function getAmountInfo({ xAmount, xTip, xTax }, command) {
         case '03':
             return formatAmount(xAmount);
         case '02':
-            return [formatAmount(xAmount)].join(US);
+            return formatAmount(xAmount);
         case '06':
             return formatAmount(xAmount);
         case '10':
@@ -121,7 +121,7 @@ function getAmountInfo({ xAmount, xTip, xTax }, command) {
             return '';
         // case '38':               // TRANSACTION ADJUSTMENT
         default:
-            return [formatAmount(xAmount), formatAmount(xTip), formatAmount(xTax)].join(US);
+            return '';
     }
 }
 

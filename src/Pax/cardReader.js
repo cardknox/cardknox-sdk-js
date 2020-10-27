@@ -29,6 +29,7 @@ export default class CardReader {
     }
 
     validate(request) {
+        //TODO: handle string '0'
         request.xInvoice = request.xInvoice || '';
         request.xStreet = request.xStreet || '';
         request.xZip = request.xZip || '';
