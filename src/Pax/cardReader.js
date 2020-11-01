@@ -29,11 +29,12 @@ export default class CardReader {
     }
 
     validate(request) {
+        //TODO: handle string '0'
         request.xInvoice = request.xInvoice || '';
         request.xStreet = request.xStreet || '';
         request.xZip = request.xZip || '';
-        request.xTip = request.xTip || 0;
-        request.xTax = request.xTax || 0;
+        request.xTip = request.xTip || '';
+        request.xTax = request.xTax || '';
         request.xExp = request.xExp || '';
         request.xAllowDuplicate = !!request.xAllowDuplicate;
         request.xBillFirstName = request.xBillFirstName || '';
