@@ -5,11 +5,10 @@
     <title>SDK Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="/scripts/index.min.js"></script>
-    <script src="config.js"></script>
+    <script src="scripts/cardknox-sdk.min.js"></script>
     <style>
         body {
             font-size: 18px;
@@ -34,7 +33,8 @@
         }
 
         input[type=submit],
-        #signature {
+        #signature,
+        button {
             background-color: #4CAF50;
             color: white;
             padding: 14px 20px;
@@ -62,9 +62,20 @@
 
     <div class="container">
 
+        <form action="" id="config">
+            <div class="col-md-6 col-lg-5">
+                <h2>Configuration</h2>
+                <label for="deviceIpAddress">IP Address</label>
+                <input type="text" name="deviceIpAddress" id="deviceIpAddress" />
+                <label for="deviceIpPort">IP Port</label>
+                <input type="text" name="deviceIpPort" id="deviceIpPort" />
+            </div>
+        </form>
+
+
         <form id="form">
-            <div class="col-md-6 col-md-offset-3">
-                <h2>Sample Payment (AJAX)</h2>
+            <div class="col-md-6 col-lg-offset-2 col-lg-5">
+                <h2>Payment</h2>
 
                 <input type="hidden" name="xCommand" value="cc:sale" />
                 <label for="uname"><b>Amount</b></label>
@@ -80,44 +91,58 @@
                 <input type="hidden" name="xVersion" value="4.5.5" />
 
                 <input type="submit" value="Initiate Payment" />
-
                 <button id="signature">Get Signature</button>
-
-                <img src="" alt="" id="sigimage">
             </div>
-            <p id="response"></p>
         </form>
+        <img src="" alt="" id="sigimage">
+        <p id="response"></p>
     </div>
 
     <script>
-        document.getElementsByName("xKey")[0].value = config.xKey;
-
         var form = document.getElementById("form");
+        var configForm = document.getElementById("config");
+
+        var ipAddress = document.getElementById("deviceIpAddress");
+        ipAddress.value = localStorage.getItem("deviceIpAddress");
+        ipAddress.addEventListener('blur', e => localStorage.setItem("deviceIpAddress", e.srcElement.value));
+
+        var ipPort = document.getElementById("deviceIpPort");
+        ipPort.value = localStorage.getItem("deviceIpPort");
+        ipPort.addEventListener('blur', e => localStorage.setItem("deviceIpPort", e.srcElement.value));
 
         form.addEventListener('submit', e => {
             e.preventDefault();
 
             document.getElementById("response").innerHTML = "";
 
-            window.formData = new FormData(form);
+            var formData = new FormData(form);
+            var config = Object.fromEntries(new FormData(configForm).entries());
 
-            // console.log(formData)
+            process(Object.assign(Object.fromEntries(formData.entries()), {
+                settings: {
+                    deviceIpAddress: config.deviceIpAddress,
+                    deviceIpPort: config.deviceIpPort
+                }
+            })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r))
+            .catch(console.error);
+        });
 
-            processAsync(Object.assign(Object.fromEntries(formData.entries()), {
-                xDeviceType: config.xDeviceType,
-                xSerialNumber: config.xSerialNumber
-            })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r));
-        })
         var signatureButton = document.getElementById('signature');
-
         signatureButton.addEventListener('click', e => {
             e.preventDefault();
 
-            window.formData = new FormData(form);
+            document.getElementById("response").innerHTML = "";
+            document.getElementById('sigimage').setAttribute('src', '');
+            var config = Object.fromEntries(new FormData(configForm).entries());
 
-            getSignature({serialNumber: '1', port: '10009'}).then(r => {
-                document.getElementById("response").innerHTML = JSON.stringify(r);
-                document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
+            getSignature({
+                deviceIpAddress: config.deviceIpAddress,
+                deviceIpPort: config.deviceIpPort
+            }).then(r => {
+                if (!r.xError)
+                    document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
+                else
+                    document.getElementById("response").innerHTML = JSON.stringify(r);
             }).catch(console.error);
         });
     </script>
