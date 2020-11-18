@@ -23,7 +23,8 @@
         }
 
         input[type=text],
-        input[type=password] {
+        input[type=password],
+        select {
             width: 100%;
             padding: 12px 20px;
             margin-bottom: 20px;
@@ -77,7 +78,6 @@
             <div class="col-md-6 col-lg-offset-2 col-lg-5">
                 <h2>Payment</h2>
 
-                <input type="hidden" name="xCommand" value="cc:sale" />
                 <label for="uname"><b>Amount</b></label>
                 <input type="text" name="xAmount" value="1.99" />
 
@@ -90,7 +90,12 @@
                 <input type="hidden" name="xSoftwareVersion" value="1" />
                 <input type="hidden" name="xVersion" value="4.5.5" />
 
-                <input type="submit" value="Initiate Payment" />
+                <select name="xCommand">
+                    <option value="cc:sale">Sale</option>
+                    <option value="cc:void">Void</option>
+                    <option value="cc:credit">Credit</option>
+                </select>
+                <input type="submit" value="Initiate" />
                 <button id="signature">Get Signature</button>
             </div>
         </form>
