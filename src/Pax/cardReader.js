@@ -1,6 +1,5 @@
 
 import { getTransactionCommand, convertToResponse, TransactionResponse } from "./transactionApi";
-import { RESPONSECODE_OK } from "./constants";
 
 export default class CardReader {
     constructor(ipDeviceCommunicator) {
@@ -14,10 +13,6 @@ export default class CardReader {
             const command = getTransactionCommand(request);
             const deviceResponse = await this.ipDeviceCommunicator.getData(btoa(command));
             const parsedResponse = new TransactionResponse(deviceResponse);
-
-            if (parsedResponse.responseCode !== RESPONSECODE_OK)
-                throw parsedResponse.responseMessage;
-
             return convertToResponse(request, parsedResponse);
         } catch (error) {
             return {
