@@ -1,7 +1,7 @@
 
 import { getDateyyyyMMddHHmmss, FS, US, STX_ETX_LRC } from "../core/core";
 import { ENUM_COMMAND_TYPE } from "../constants";
-import { API_VERSION, RESPONSECODE_OK } from "./constants";
+import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRANSACTION } from "./constants";
 
 /**
  * 
@@ -37,7 +37,7 @@ export function getTransactionCommand(request) {
     ];
 
     if (['T00', 'T06'].includes(command))
-        payload.push(getAVSInformation(request) + FS + FS + FS + FS);
+        payload.push(getAVSInformation(request, transactionType) + FS + FS + FS + FS);
     else
         payload.push(FS + FS);
 
@@ -147,13 +147,28 @@ function getTraceInfo({ xInvoice, xRefnum, xZip, xStreet }) {
         xRefnum,
         xInvoice,
         '',
-        xRefnum,
+        '',     //TODO: give back transaction number so it can be voided (here)
         getDateyyyyMMddHHmmss(new Date()),
+        '',
         '',
         xZip,
         xStreet,
-        US
+        '',
+        ''
     ].join(US);
+}
+
+function shouldAddAVS(command) {
+    return isCreditTransactionType(command);
+}
+
+function isCreditTransactionType(command) {
+    return [
+        '01',
+        '03',
+        //'04','06',?
+        '10'
+    ].includes(command);
 }
 
 function getEBTType(xCommand) {
@@ -167,10 +182,11 @@ function getEBTType(xCommand) {
         throw "Unsupported EBT Type: " + xCommand;
 }
 
-function getAVSInformation({ xZip, xStreet }) {
+function getAVSInformation({ xZip, xStreet }, command) {
+    const addAVS = shouldAddAVS(command);
     return [
-        xZip,
-        xStreet
+        addAVS ? xZip : '',
+        addAVS ? xStreet : ''
     ].join(US);
 }
 
@@ -350,9 +366,9 @@ class ResponseAVSInformation {
 export function convertToResponse(request, response) {
     if (response.responseCode !== RESPONSECODE_OK)
         return {
-            xResult: "E",
-            xStatus: "Error",
-            xError: response.responseMessage
+            xResult: getTransactionResult(response),
+            xStatus: getTransactionStatus(response),
+            xError: getTransactionError(response)
         };
     return {
         xResult: 'A',
@@ -376,4 +392,51 @@ export function convertToResponse(request, response) {
         xInvoice: response.traceInformation.invoiceNumber
         // TODO: determine xCardType: , xEntryMethod: ''
     };
+
+    /**
+     * 
+     * @param {TransactionResponse} param0 
+     * @returns {string}
+     */
+    function getTransactionResult({ responseCode }) {
+        switch (responseCode) {
+            case RESPONSECODE_OK:
+                return 'A';
+            case RESPONSECODE_DECLINE:
+            case RESPONSECODE_DUPTRANSACTION:
+                return 'D';
+            default:
+                return 'E';
+        }
+    }
+
+    /**
+     * 
+     * @param {TransactionResponse} param0
+     * @returns {string}
+     */
+    function getTransactionStatus({ responseCode }) {
+        switch (responseCode) {
+            case RESPONSECODE_OK:
+                return 'Approved';
+            case RESPONSECODE_DECLINE:
+            case RESPONSECODE_DUPTRANSACTION:
+                return 'Declined';
+            default:
+                return 'Error';
+        }
+    }
+
+    /**
+     * 
+     * @param {TransactionResponse} param0 
+     * @returns {string}
+     */
+    function getTransactionError({ responseCode, hostInformation, responseMessage }) {
+        if (responseCode === RESPONSECODE_OK)
+            return '';
+        if (hostInformation?.hostResponseCode && hostInformation?.hostResponseCode !== '0')
+            return hostInformation?.hostResponseMessage || responseMessage;
+        return responseMessage;
+    }
 }
