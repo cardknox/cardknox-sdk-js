@@ -25,3 +25,4 @@ artifacts:
   files:
     - public/sample.html
     - dist/cardknox-sdk.min.js
+  discard-paths: yes
