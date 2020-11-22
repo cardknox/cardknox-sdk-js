@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SDK Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="scripts/cardknox-sdk.min.js"></script>
+    <style>
+        body {
+            font-size: 18px;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-bottom: 50px;
+        }
+
+        input[type=text],
+        input[type=password],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input[type=submit],
+        #signature,
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type=submit]:hover,
+        #signature:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {}
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <form action="" id="config">
+            <div class="col-md-6 col-lg-5">
+                <h2>Configuration</h2>
+                <label for="deviceIpAddress">IP Address</label>
+                <input type="text" name="deviceIpAddress" id="deviceIpAddress" />
+                <label for="deviceIpPort">IP Port</label>
+                <input type="text" name="deviceIpPort" id="deviceIpPort" />
+            </div>
+        </form>
+
+
+        <form id="form">
+            <div class="col-md-6 col-lg-offset-2 col-lg-5">
+                <h2>Payment</h2>
+
+                <label for="uname"><b>Amount</b></label>
+                <input type="text" name="xAmount" value="1.99" />
+
+                <label for="psw"><b>Invoice</b></label>
+                <input type="text" name="xInvoice" value="12345" />
+                <input type="hidden" name="xStreet" value="123 Main St" />
+                <input type="hidden" name="xZip" value="11111" />
+                <input type="hidden" name="xKey" value="" />
+                <input type="hidden" name="xSoftwareName" value="test" />
+                <input type="hidden" name="xSoftwareVersion" value="1" />
+                <input type="hidden" name="xVersion" value="4.5.5" />
+
+                <select name="xCommand">
+                    <option value="cc:sale">Sale</option>
+                    <option value="cc:void">Void</option>
+                    <option value="cc:credit">Credit</option>
+                </select>
+                <input type="submit" value="Initiate" />
+                <button id="signature">Get Signature</button>
+            </div>
+        </form>
+        <img src="" alt="" id="sigimage">
+        <p id="response"></p>
+    </div>
+
+    <script>
+        var form = document.getElementById("form");
+        var configForm = document.getElementById("config");
+
+        var ipAddress = document.getElementById("deviceIpAddress");
+        ipAddress.value = localStorage.getItem("deviceIpAddress");
+        ipAddress.addEventListener('blur', e => localStorage.setItem("deviceIpAddress", e.srcElement.value));
+
+        var ipPort = document.getElementById("deviceIpPort");
+        ipPort.value = localStorage.getItem("deviceIpPort");
+        ipPort.addEventListener('blur', e => localStorage.setItem("deviceIpPort", e.srcElement.value));
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            document.getElementById("response").innerHTML = "";
+
+            var formData = new FormData(form);
+            var config = Object.fromEntries(new FormData(configForm).entries());
+
+            process(Object.assign(Object.fromEntries(formData.entries()), {
+                settings: {
+                    deviceIpAddress: config.deviceIpAddress,
+                    deviceIpPort: config.deviceIpPort
+                }
+            })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r))
+            .catch(console.error);
+        });
+
+        var signatureButton = document.getElementById('signature');
+        signatureButton.addEventListener('click', e => {
+            e.preventDefault();
+
+            document.getElementById("response").innerHTML = "";
+            document.getElementById('sigimage').setAttribute('src', '');
+            var config = Object.fromEntries(new FormData(configForm).entries());
+
+            getSignature({
+                deviceIpAddress: config.deviceIpAddress,
+                deviceIpPort: config.deviceIpPort
+            }).then(r => {
+                if (!r.xError)
+                    document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
+                else
+                    document.getElementById("response").innerHTML = JSON.stringify(r);
+            }).catch(console.error);
+        });
+    </script>
+
+</body>
+
+</html>
