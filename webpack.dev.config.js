@@ -5,7 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 config.plugins.push(
     new CopyPlugin({
         patterns: [
-            { from: 'dist', to: '../public/scripts' },
+            { from: 'dist', to: '../public' },
         ],
     })
 );
