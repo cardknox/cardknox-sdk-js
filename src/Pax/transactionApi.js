@@ -1,7 +1,7 @@
 
 import { getDateyyyyMMddHHmmss, FS, US, STX_ETX_LRC } from "../core/core";
-import { ENUM_CARD_TYPE, ENUM_COMMAND_TYPE } from "../constants";
-import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRANSACTION } from "./constants";
+import { ENUM_COMMAND_TYPE } from "../constants";
+import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRANSACTION, ENUM_CARD_TYPE } from "./constants";
 
 /**
  * 
