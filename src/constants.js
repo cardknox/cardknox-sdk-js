@@ -21,14 +21,3 @@ export const ENUM_COMMAND_TYPE = {
     GIFT_ISSUE: 'gift:issue',
     GIFT_BALANCE: 'gift:balance'
 };
-export const ENUM_CARD_TYPE = {
-    UKNOWN: 'Unknown',
-    EBT: 'EBT',
-    GIFTCARD: 'Giftcard',
-    AMEX: 'Amex',
-    VISA: 'Visa',
-    MASTERCARD: 'Mastercard',
-    DISCOVER: 'Discover',
-    DINERS: 'Diners',
-    JCB: 'JCB'
-};
