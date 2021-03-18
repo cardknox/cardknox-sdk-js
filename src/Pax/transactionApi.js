@@ -1,7 +1,7 @@
 
 import { getDateyyyyMMddHHmmss, FS, US, STX_ETX_LRC } from "../core/core";
 import { ENUM_COMMAND_TYPE } from "../constants";
-import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRANSACTION } from "./constants";
+import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRANSACTION, ENUM_CARD_TYPE } from "./constants";
 
 /**
  * 
@@ -315,6 +315,9 @@ class ResponseAccountInformation {
         if (responseParts.length < 3) return;
         this.expDate = responseParts[2].trim();
 
+        if (responseParts.length < 7) return;
+        this.cardType = responseParts[6].trim();
+
         if (responseParts.length < 8) return;
         this.cardHolder = responseParts[7].trim();
     }
@@ -389,7 +392,8 @@ export function convertToResponse(request, response) {
         xCashbackAmount: (response.amountInformation.cashbackAmount || 0) / 100,
         xTip: (response.amountInformation.tipAmount || 0) / 100,
         xExp: response.accountInformation.expDate,
-        xInvoice: response.traceInformation.invoiceNumber
+        xInvoice: response.traceInformation.invoiceNumber,
+        xCardType: getCardType(response.accountInformation.cardType)
         // TODO: determine xCardType: , xEntryMethod: ''
     };
 
@@ -438,5 +442,30 @@ export function convertToResponse(request, response) {
         if (hostInformation?.hostResponseCode && hostInformation?.hostResponseCode !== '0')
             return hostInformation?.hostResponseMessage || responseMessage;
         return responseMessage;
+    }
+
+    /**
+     * 
+     * @param {string} cardTypeCode 
+     * @returns {string}
+     */
+    function getCardType(cardTypeCode) {
+        cardTypeCode = Number.parseInt(cardTypeCode);
+        switch (cardTypeCode) {
+            case 1:
+                return ENUM_CARD_TYPE.VISA;
+            case 2:
+                return ENUM_CARD_TYPE.MASTERCARD;
+            case 3:
+                return ENUM_CARD_TYPE.AMEX;
+            case 4:
+                return ENUM_CARD_TYPE.DISCOVER;
+            case 5:
+                return ENUM_CARD_TYPE.DINERS;
+            case 7:
+                return ENUM_CARD_TYPE.JCB;
+            default:
+                return ENUM_CARD_TYPE.UKNOWN;
+        }
     }
 }
