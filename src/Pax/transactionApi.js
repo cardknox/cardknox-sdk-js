@@ -55,7 +55,7 @@ function getCommand({ xCommand }, enablePin) {
         return 'T04';
     if (xCommand.toLowerCase().indexOf('gift') >= 0)
         return 'T06';
-    throw 'Unsupported command: ' + xCommand;
+    throw new Error('Unsupported command: ' + xCommand);
 }
 
 function getTransactionType({ xCommand }) {
@@ -88,7 +88,7 @@ function getTransactionType({ xCommand }) {
         default:
             break;
     }
-    throw 'Unsupported command: ' + xCommand;
+    throw new Error('Unsupported command: ' + xCommand);
 }
 
 function getAmountInfo({ xAmount, xTax }, command) {
@@ -179,7 +179,7 @@ function getEBTType(xCommand) {
     else if (xCommand.toLowerCase().indexOf('ebtcb') >= 0)
         return 'C';
     else
-        throw "Unsupported EBT Type: " + xCommand;
+        throw new Error("Unsupported EBT Type: " + xCommand);
 }
 
 function getAVSInformation({ xZip, xStreet }, command) {
@@ -396,76 +396,76 @@ export function convertToResponse(request, response) {
         xCardType: getCardType(response.accountInformation.cardType)
         // TODO: determine xCardType: , xEntryMethod: ''
     };
+}
 
-    /**
-     * 
-     * @param {TransactionResponse} param0 
-     * @returns {string}
-     */
-    function getTransactionResult({ responseCode }) {
-        switch (responseCode) {
-            case RESPONSECODE_OK:
-                return 'A';
-            case RESPONSECODE_DECLINE:
-            case RESPONSECODE_DUPTRANSACTION:
-                return 'D';
-            default:
-                return 'E';
-        }
+/**
+ * 
+ * @param {TransactionResponse} param0 
+ * @returns {string}
+ */
+function getTransactionResult({ responseCode }) {
+    switch (responseCode) {
+        case RESPONSECODE_OK:
+            return 'A';
+        case RESPONSECODE_DECLINE:
+        case RESPONSECODE_DUPTRANSACTION:
+            return 'D';
+        default:
+            return 'E';
     }
+}
 
-    /**
-     * 
-     * @param {TransactionResponse} param0
-     * @returns {string}
-     */
-    function getTransactionStatus({ responseCode }) {
-        switch (responseCode) {
-            case RESPONSECODE_OK:
-                return 'Approved';
-            case RESPONSECODE_DECLINE:
-            case RESPONSECODE_DUPTRANSACTION:
-                return 'Declined';
-            default:
-                return 'Error';
-        }
+/**
+ * 
+ * @param {TransactionResponse} param0
+ * @returns {string}
+ */
+function getTransactionStatus({ responseCode }) {
+    switch (responseCode) {
+        case RESPONSECODE_OK:
+            return 'Approved';
+        case RESPONSECODE_DECLINE:
+        case RESPONSECODE_DUPTRANSACTION:
+            return 'Declined';
+        default:
+            return 'Error';
     }
+}
 
-    /**
-     * 
-     * @param {TransactionResponse} param0 
-     * @returns {string}
-     */
-    function getTransactionError({ responseCode, hostInformation, responseMessage }) {
-        if (responseCode === RESPONSECODE_OK)
-            return '';
-        if (hostInformation?.hostResponseCode && hostInformation?.hostResponseCode !== '0')
-            return hostInformation?.hostResponseMessage || responseMessage;
-        return responseMessage;
-    }
+/**
+ * 
+ * @param {TransactionResponse} param0 
+ * @returns {string}
+ */
+function getTransactionError({ responseCode, hostInformation, responseMessage }) {
+    if (responseCode === RESPONSECODE_OK)
+        return '';
+    if (hostInformation?.hostResponseCode && hostInformation?.hostResponseCode !== '0')
+        return hostInformation?.hostResponseMessage || responseMessage;
+    return responseMessage;
+}
 
-    /**
-     * 
-     * @param {string} cardTypeCode 
-     * @returns {string}
-     */
-    function getCardType(cardTypeCode) {
-        cardTypeCode = Number.parseInt(cardTypeCode);
-        switch (cardTypeCode) {
-            case 1:
-                return ENUM_CARD_TYPE.VISA;
-            case 2:
-                return ENUM_CARD_TYPE.MASTERCARD;
-            case 3:
-                return ENUM_CARD_TYPE.AMEX;
-            case 4:
-                return ENUM_CARD_TYPE.DISCOVER;
-            case 5:
-                return ENUM_CARD_TYPE.DINERS;
-            case 7:
-                return ENUM_CARD_TYPE.JCB;
-            default:
-                return ENUM_CARD_TYPE.UKNOWN;
-        }
+/**
+ * 
+ * @param {string} cardTypeCode 
+ * @returns {string}
+ */
+function getCardType(cardTypeCode) {
+    cardTypeCode = Number.parseInt(cardTypeCode);
+    switch (cardTypeCode) {
+        case 1:
+            return ENUM_CARD_TYPE.VISA;
+        case 2:
+            return ENUM_CARD_TYPE.MASTERCARD;
+        case 3:
+            return ENUM_CARD_TYPE.AMEX;
+        case 4:
+            return ENUM_CARD_TYPE.DISCOVER;
+        case 5:
+            return ENUM_CARD_TYPE.DINERS;
+        case 7:
+            return ENUM_CARD_TYPE.JCB;
+        default:
+            return ENUM_CARD_TYPE.UKNOWN;
     }
 }

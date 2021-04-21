@@ -9,7 +9,6 @@ export default class CardReader {
     async process(request) {
         try {
             this.validate(request);
-
             const command = getTransactionCommand(request);
             const deviceResponse = await this.ipDeviceCommunicator.getData(btoa(command));
             const parsedResponse = new TransactionResponse(deviceResponse);

@@ -18,10 +18,10 @@ export default class Device {
     }
 
     async getSignature() {
-        return await this.signatureReader.getSignature();
+        return this.signatureReader.getSignature();
     }
 
     async process(request) {
-        return await this.cardReader.process(request);
+        return this.cardReader.process(request);
     }
 }
