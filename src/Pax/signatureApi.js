@@ -1,7 +1,7 @@
 
 import { FS } from "../core/core";
 
-export class A09_Response {
+export class A09Response {
     constructor(response) {
         response = response.substr(0, response.length - 2);
         const responseParts = response.split(FS);
@@ -26,7 +26,7 @@ export class A09_Response {
     }
 }
 
-export class A21_Response {
+export class A21Response {
     constructor(response) {
         response = response.substr(0, response.length - 2);
         const responseParts = response.split(FS);

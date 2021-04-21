@@ -74,7 +74,7 @@ export function getDateyyyyMMddHHmmss(date) {
  * @returns {string}
  */
 export function padZeros(num, length) {
-    return Array(Math.max(length - String(num).length + 1, 0)).join(0) + num;
+    return Array(Math.max(length - String(num).length + 1, 0)).join("0") + num;
 }
 
 // streams
@@ -83,7 +83,7 @@ export function padZeros(num, length) {
  * 
  * @param {ReadableStreamDefaultReader} reader 
  * @param {Uint8Array} prevChunk 
- * @returns {Uint8Array}
+ * @returns {Promise<Uint8Array>}
  */
 export async function readAll(reader, prevChunk) {
     return await reader.read()
@@ -106,7 +106,7 @@ export async function readAll(reader, prevChunk) {
  * @param {Uint8Array} buffer2 
  * @returns {Uint8Array}
  */
-export function arrayBufferConcat(buffer1, buffer2){
+export function arrayBufferConcat(buffer1, buffer2) {
     const tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
     tmp.set(new Uint8Array(buffer1), 0);
     tmp.set(new Uint8Array(buffer2), buffer1.byteLength);

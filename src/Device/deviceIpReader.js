@@ -10,7 +10,7 @@ export default class DeviceIpReader {
         if (settings.deviceIpAddress)
             ip = settings.deviceIpAddress;
         else if (!settings.deviceSerialNumber)
-            throw 'Device serial number required';
+            throw new Error('Device serial number required');
 
         this.serialNumber = settings.deviceSerialNumber;
     }
