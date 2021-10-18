@@ -1,10 +1,22 @@
-import { readAll } from "../core/core";
+import { readAll, last } from "../core/core";
 
 export default class IpDeviceCommunicator {
     constructor(ip, port, protocol) {
-        this.ip = ip;
+        this._ip = ip;
         this.port = port;
+        if (last(protocol) !== ':')
+            protocol += ':';
         this.protocol = protocol;
+    }
+
+    get ip() {
+        if (!this.isHttps)
+            return this._ip;
+        return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+    }
+
+    get isHttps() {
+        return this.protocol === 'https:';
     }
 
     /**

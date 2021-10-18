@@ -54,6 +54,15 @@ export function toBytes(s) {
     return new TextEncoder().encode(s);
 }
 
+/**
+ * 
+ * @param {string} s 
+ * @returns string
+ */
+export function last(s) {
+    return s.charAt(s.length - 1);
+}
+
 // dates
 
 /**

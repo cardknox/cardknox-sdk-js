@@ -5,7 +5,7 @@
     "main": "dist/index.min.js",
     "scripts": {
         "test": "echo \"TODO: create test\" && exit 0",
-        "start": "start http://lh.cardknox.com:4000/sample.html && light-server -s public -p 4000 -w \"public/**\"",
+        "start": "start http://lh.cardknox.com:4000/sample.html && start light-server -s public -p 4000 -w \"public/**\" && npm run watch",
         "watch": "webpack --config webpack.dev.config.js --watch",
         "build-dev": "webpack --config webpack.dev.config.js",
         "build": "webpack --config webpack.prod.config.js"
