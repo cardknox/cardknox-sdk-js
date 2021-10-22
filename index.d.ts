@@ -6,6 +6,7 @@ declare interface Settings {
     deviceIpAddress: string;
     deviceIpPort: string;
     deviceSerialNumber: string;
+    deviceIpProtocol: string;
 }
 
 declare interface TransactionRequest {

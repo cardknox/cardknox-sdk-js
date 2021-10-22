@@ -1,12 +1,24 @@
-import { readAll } from "../core/core";
+import { readAll, last } from "../core/core";
 
 const LOCAL_DEVICE_TOOL_URL = 'http://localdevice.us-west-2.elasticbeanstalk.com/api/dnsrecord/save';
 
 export default class IpDeviceCommunicator {
     constructor(ip, port, protocol) {
-        this.ip = ip;
+        this._ip = ip;
         this.port = port;
+        if (last(protocol) !== ':')
+            protocol += ':';
         this.protocol = protocol;
+    }
+
+    get ip() {
+        if (!this.isHttps)
+            return this._ip;
+        return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+    }
+
+    get isHttps() {
+        return this.protocol === 'https:';
     }
 
     /**

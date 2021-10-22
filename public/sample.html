@@ -70,6 +70,8 @@
                 <input type="text" name="deviceIpAddress" id="deviceIpAddress" />
                 <label for="deviceIpPort">IP Port</label>
                 <input type="text" name="deviceIpPort" id="deviceIpPort" />
+                <label for="deviceIpProtocol">Protocol</label>
+                <input type="text" name="deviceIpProtocol" id="deviceIpProtocol" />
             </div>
         </form>
 
@@ -115,6 +117,10 @@
         ipPort.value = localStorage.getItem("deviceIpPort");
         ipPort.addEventListener('blur', e => localStorage.setItem("deviceIpPort", e.srcElement.value));
 
+        var ipProtocol = document.getElementById("deviceIpProtocol");
+        ipProtocol.value = localStorage.getItem("deviceIpProtocol");
+        ipProtocol.addEventListener('blur', e => localStorage.setItem("deviceIpProtocol", e.srcElement.value));
+
         form.addEventListener('submit', e => {
             e.preventDefault();
 
@@ -126,7 +132,8 @@
             process(Object.assign(Object.fromEntries(formData.entries()), {
                 settings: {
                     deviceIpAddress: config.deviceIpAddress,
-                    deviceIpPort: config.deviceIpPort
+                    deviceIpPort: config.deviceIpPort,
+                    deviceIpProtocol: config.deviceIpProtocol
                 }
             })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r))
             .catch(console.error);
