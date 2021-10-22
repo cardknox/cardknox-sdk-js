@@ -1,5 +1,7 @@
 import { readAll } from "../core/core";
 
+const LOCAL_DEVICE_TOOL_URL = 'http://localdevice.us-west-2.elasticbeanstalk.com/api/dnsrecord/save';
+
 export default class IpDeviceCommunicator {
     constructor(ip, port, protocol) {
         this.ip = ip;
@@ -26,7 +28,26 @@ export default class IpDeviceCommunicator {
             return chunk;
         } catch (error) {
             console.error(error);
+            await this.tryRegisterIp();
             throw error;
         }
+    }
+
+    tryRegisterIp = async () => {
+        try {
+            if (!this.isHttps)
+                return;
+            await fetch(LOCAL_DEVICE_TOOL_URL, {
+                body: `ip=${this._ip}`,
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+        
     }
 }
