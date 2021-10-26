@@ -2,6 +2,14 @@
 
 ## SDK
 
+### HTTPS
+
+To enable _https_ on the Pax device, please contact [support](support@cardkox.com).
+
+To avoid the need for a self-signed certificate, Cardknox provides a SSL certificate pointing to the local IP address. The format for the host name is \<ip-{IP address replacing the periods with dashes}-mylocaldevice.com\> ex. for IP address 127.0.0.1 the host name would be _ip-127-0-0-1-mylocaldevice.com_. The SDK will automatically format the host name correctly when the protocol is _https_ and an IP address is provided.
+
+A DNS entry must exist, mapping the host name to the IP address. The SDK will check that the entry exists if there are network errors.
+
 ### Process
 
 ##### Process a transaction
@@ -110,8 +118,8 @@ This returns a base64 encoded PNG *without the data header*.
     <tr>
         <td>deviceIpAddress</td>
         <td>String</td>
-        <td>IP address of your device</td>
-        <td></td>
+        <td>IP address of your device. When the protocol is <em>https</em> the <em>mylocaldevice.com</em> domain name will be used. See below</td>
+        <td>A domain name can be used instead</td>
     </tr>
     <tr>
         <td>deviceIpPort</td>
@@ -123,6 +131,12 @@ This returns a base64 encoded PNG *without the data header*.
         <td>deviceSerialNumber</td>
         <td>String</td>
         <td>Device serial number. Required <strong>if</strong> deviceIpAddress is not provided</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>deviceIpProtocol</td>
+        <td>String</td>
+        <td>The protocol to use to talk to the device. Defaults to the <em>location</em> protocol</td>
         <td></td>
     </tr>
 </table>

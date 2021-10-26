@@ -1,5 +1,7 @@
 import { readAll, last } from "../core/core";
 
+const IP_REGEX = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
 export default class IpDeviceCommunicator {
     constructor(ip, port, protocol) {
         this._ip = ip;
@@ -10,9 +12,9 @@ export default class IpDeviceCommunicator {
     }
 
     get ip() {
-        if (!this.isHttps)
-            return this._ip;
-        return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+        if (this.isHttps && this._ip.match(IP_REGEX))
+            return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+        return this._ip;
     }
 
     get isHttps() {
