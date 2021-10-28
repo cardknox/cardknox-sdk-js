@@ -1,11 +1,186 @@
+queue_rules:
+  - name: default
+    conditions:
+      - label!=donotmerge
+      - label!=wip
+      - label!=pending base merge
+
 pull_request_rules:
   - name: Update and Merge
     conditions:
       - "#approved-reviews-by>=1"
-      - label=automerge
+      - -label~=required
       - label!=donotmerge
       - label!=wip
+      - label!=pending base merge
     actions:
-      merge:
-        strict: smart 
+      queue:
         method: squash
+        name: default
+  - name: remove all 'required' labels
+    conditions:
+      - "#approved-reviews-by=0"
+      - -closed
+    actions:
+      label:
+        remove:
+          - seniordevs required
+          - corecodereview required
+          - secops required
+          - bi required
+  - name: add label if approved but seniordevs is still required
+    conditions:
+      - "#approved-reviews-by>=1"
+      - review-requested=@seniordevs
+      - -closed
+    actions:
+      label:
+        add:
+          - seniordevs required
+  - name: remove label if seniordevs is not required
+    conditions:
+      - review-requested!=@seniordevs
+      - -closed
+    actions:
+      label:
+        remove:
+          - seniordevs required
+  - name: add label if approved but corecodereview is still required
+    conditions:
+      - "#approved-reviews-by>=1"
+      - review-requested=@corecodereview
+      - -closed
+    actions:
+      label:
+        add:
+          - corecodereview required
+  - name: remove label if corecodereview is not required
+    conditions:
+      - review-requested!=@corecodereview
+      - -closed
+    actions:
+      label:
+        remove:
+          - corecodereview required
+  - name: add label if approved but gatewayengines is still required
+    conditions:
+      - "#approved-reviews-by>=1"
+      - review-requested=@gatewayengines
+      - -closed
+    actions:
+      label:
+        add:
+          - gatewayengines required
+  - name: remove label if gatewayengines is not required
+    conditions:
+      - review-requested!=@gatewayengines
+      - -closed
+    actions:
+      label:
+        remove:
+          - gatewayengines required
+  - name: add label if approved but secops is still required
+    conditions:
+      - "#approved-reviews-by>=1"
+      - review-requested=@secops
+      - -closed
+    actions:
+      label:
+        add:
+          - secops required
+  - name: remove label if secops is not required
+    conditions:
+      - review-requested!=@secops
+      - -closed
+    actions:
+      label:
+        remove:
+          - secops required
+  - name: add label if approved but bi is still required
+    conditions:
+      - "#approved-reviews-by>=1"
+      - review-requested=@bi
+      - -closed
+    actions:
+      label:
+        add:
+          - bi required
+  - name: remove label if bi is not required
+    conditions:
+      - review-requested!=@bi
+      - -closed
+    actions:
+      label:
+        remove:
+          - bi required
+  - name: add label on conflict
+    conditions:
+      - conflict
+      - -closed
+    actions:
+      label:
+        add:
+          - conflicts
+      comment:
+        message: Please fix the conflicts @{{author}}
+  - name: remove label on conflict
+    conditions:
+      - -conflict
+      - -closed
+    actions:
+      label:
+        remove:
+          - conflicts
+  - name: backport to rc
+    conditions:
+      - base=master
+      - label=backport to last rc
+    actions:
+      backport:
+        branches:       
+          - rc/2021/10/06-2.31
+  - name: backport to penultimate rc
+    conditions:
+      - base=master
+      - label=backport to second-last rc
+    actions:
+      backport:
+        branches:
+          - rc/2021/08/19-2.30
+  - name: message on build check failure
+    conditions: 
+      - check-failure=build
+      - -closed
+    actions:
+      label:
+        add:
+          - build failed
+      comment:
+        message: "Pull request #{{ number }} has failed the build check @{{author}}"
+  - name: remove build failed
+    conditions:
+      - check-success=build
+      - -closed
+    actions:
+      label:
+        remove:
+          - build failed
+  - name: add label on pending base merge
+    conditions:
+      - -base=master
+      - -base~=^rc/*/*/*
+      - -closed
+    actions:
+      label:
+        add:
+          - pending base merge
+  - name: remove label on pending base merge
+    conditions:
+      - or:
+        - base=master
+        - base~=^rc/*/*/*
+      - -closed
+    actions:
+      label:
+        remove:
+          - pending base merge
