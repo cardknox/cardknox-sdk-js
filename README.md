@@ -4,7 +4,7 @@
 
 ### HTTPS
 
-To enable _https_ on the Pax device, please contact [support](support@cardkox.com).
+To enable _https_ on the Pax device, please contact [support](mailto:support@cardkox.com).
 
 To avoid the need for a self-signed certificate, Cardknox provides a SSL certificate pointing to the local IP address. The format for the host name is \<ip-{IP address replacing the periods with dashes}-mylocaldevice.com\> i.e. for IP address 192.168.1.1 the host name would be _ip-192-168-1-1-mylocaldevice.com_. The SDK will automatically format the host name correctly when the protocol is _https_.
 
