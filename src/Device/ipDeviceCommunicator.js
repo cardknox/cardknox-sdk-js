@@ -1,4 +1,5 @@
 import { readAll, last } from "../core/core";
+import isIp from "is-ip";
 
 export default class IpDeviceCommunicator {
     constructor(ip, port, protocol) {
@@ -10,9 +11,9 @@ export default class IpDeviceCommunicator {
     }
 
     get ip() {
-        if (!this.isHttps)
-            return this._ip;
-        return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+        if (this.isHttps && isIp.v4(this._ip))
+            return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+        return this._ip;
     }
 
     get isHttps() {
