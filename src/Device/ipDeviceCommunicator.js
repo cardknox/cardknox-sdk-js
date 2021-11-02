@@ -1,6 +1,6 @@
 import { readAll, last } from "../core/core";
 
-const LOCAL_DEVICE_TOOL_URL = 'http://localdevice.us-west-2.elasticbeanstalk.com/api/dnsrecord/save';
+const LOCAL_DEVICE_TOOL_URL = '/';      //TODO: Use correct endpoint when app is released
 
 export default class IpDeviceCommunicator {
     constructor(ip, port, protocol) {
