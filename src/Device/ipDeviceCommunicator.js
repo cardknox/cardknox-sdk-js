@@ -1,4 +1,5 @@
 import { readAll, last } from "../core/core";
+import isIp from "is-ip";
 
 const LOCAL_DEVICE_TOOL_URL = '/';      //TODO: Use correct endpoint when app is released
 
@@ -12,9 +13,9 @@ export default class IpDeviceCommunicator {
     }
 
     get ip() {
-        if (!this.isHttps)
-            return this._ip;
-        return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+        if (this.isHttps && isIp.v4(this._ip))
+            return `ip-${this._ip.replaceAll('.', '-')}.mylocaldevice.com`;
+        return this._ip;
     }
 
     get isHttps() {
