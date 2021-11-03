@@ -40,7 +40,7 @@ export default class IpDeviceCommunicator {
             return chunk;
         } catch (error) {
             console.error(error);
-            await this.tryRegisterIp();
+            // await this.tryRegisterIp(); //TODO: Enable once LOCAL_DEVICE_TOOL_URL endpoint is available
             throw error;
         }
     }
