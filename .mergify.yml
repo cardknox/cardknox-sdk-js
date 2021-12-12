@@ -15,8 +15,8 @@ pull_request_rules:
       - label!=pending base merge
     actions:
       queue:
-        method: squash
         name: default
+        method: squash
   - name: remove all 'required' labels
     conditions:
       - "#approved-reviews-by=0"
@@ -138,7 +138,7 @@ pull_request_rules:
     actions:
       backport:
         branches:       
-          - rc/2021/10/06-2.31
+          - rc/2021/12/01-2.33
   - name: backport to penultimate rc
     conditions:
       - base=master
@@ -146,7 +146,7 @@ pull_request_rules:
     actions:
       backport:
         branches:
-          - rc/2021/08/19-2.30
+          - rc/2021/11/03-2.32
   - name: message on build check failure
     conditions: 
       - check-failure=build
