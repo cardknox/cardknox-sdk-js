@@ -23,7 +23,7 @@ export function getTransactionCommand(request) {
 
     const command = getCommand(request);
     const transactionType = getTransactionType(request);
-    const amountInfo = getAmountInfo(request, transactionType);
+    const amountInfo = getAmountInfo(request, transactionType, command);
     const accountInfo = getAccountInfo(request);
     const traceInfo = getTraceInfo(request);
 
@@ -36,7 +36,7 @@ export function getTransactionCommand(request) {
         traceInfo
     ];
 
-    if (['T00', 'T06'].includes(command))
+    if (['T00'].includes(command))
         payload.push(getAVSInformation(request, transactionType) + FS + FS + FS + FS);
     else
         payload.push(FS + FS);
@@ -91,18 +91,21 @@ function getTransactionType({ xCommand }) {
     throw new Error('Unsupported command: ' + xCommand);
 }
 
-function getAmountInfo({ xAmount, xTax }, command) {
-    switch (command) {
+function getAmountInfo({ xAmount, xTax }, transactionType, command) {
+    switch (transactionType) {
         case '01':
         case '04':
-        case '05':
-            return [
+        case '05': {
+            const info = [
                 formatAmount(xAmount),
                 '',                             // tip
                 '',                             // cashback
-                '',                             //fee
-                formatAmount(xTax)
-            ].join(US);
+                ''                              // fee
+            ];
+            if (command != 'T06')
+                info.push(formatAmount(xTax));
+            return info.join(US);
+        }
         case '03':
             return formatAmount(xAmount);
         case '02':
