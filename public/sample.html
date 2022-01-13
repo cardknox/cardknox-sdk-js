@@ -80,8 +80,11 @@
             <div class="col-md-6 col-lg-offset-2 col-lg-5">
                 <h2>Payment</h2>
 
-                <label for="uname"><strong>Amount</strong></label>
+                <label for="xAmount"><strong>Amount</strong></label>
                 <input type="text" name="xAmount" value="1.99" />
+
+                <label for="xTax"><strong>Tax</strong></label>
+                <input type="text" name="xTax" value="0.04" />
 
                 <label for="psw"><strong>Invoice</strong></label>
                 <input type="text" name="xInvoice" value="12345" />
@@ -96,6 +99,7 @@
                     <option value="cc:sale">Sale</option>
                     <option value="cc:void">Void</option>
                     <option value="cc:credit">Credit</option>
+                    <option value="gift:redeem">Gift</option>
                 </select>
                 <input type="submit" value="Initiate" />
                 <button id="signature">Get Signature</button>
