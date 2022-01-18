@@ -32,8 +32,8 @@ const S3DIR = 'sdk-js';
       if (!(await fileExistsAsync(item.localPath)))
         throw new Error(`Missing file: ${item.localPath}`);
     }));
-    await Promise.all(filesToUpload.map(item => {
-      uploadLocalFileAsync(S3, {
+    await Promise.all(filesToUpload.map(async item => {
+      await uploadLocalFileAsync(S3, {
         localPath: item.localPath,
         key: `${S3DIR}/${item.key}`,
         bucketName: bucketName
