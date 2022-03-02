@@ -2,21 +2,21 @@
 export { ENUM_COMMAND_TYPE } from './src/constants';
 
 declare interface Settings {
-    deviceName: string;
+    // deviceName: string;
     deviceIpAddress: string;
     deviceIpPort: string;
-    deviceSerialNumber: string;
+    // deviceSerialNumber: string;
     deviceIpProtocol: string;
 }
 
 declare interface TransactionRequest {
-    xKey: string;
     xVersion: string;
     xSoftwareName: string;
     xSoftwareVersion: string;
     xCommand: string;
     xAmount: number;
     xInvoice: string;
+    xStoreId: string;
     settings: Settings;
 }
 

@@ -13,6 +13,7 @@ import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRA
  * @property {bool} enablePin
  * @property {string} xZip
  * @property {string} xStreet
+ * @property {string} xStoreId
  */
 
 /**
@@ -37,9 +38,14 @@ export function getTransactionCommand(request) {
     ];
 
     if (['T00'].includes(command))
-        payload.push(getAVSInformation(request, transactionType) + FS + FS + FS + FS);
-    else
+        payload.push(getAVSInformation(request, transactionType));
+
+    payload.push(request.xStoreId);
+
+    if (['T00'].includes(command))
         payload.push(FS + FS);
+    else
+        payload.push(FS);
 
     const payloadString = payload.join(FS);
     return STX_ETX_LRC(payloadString);

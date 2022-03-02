@@ -60,12 +60,6 @@ This returns a base64 encoded PNG *without the data header*.
         <th>Valid values</th>
     </tr>
     <tr>
-        <td>xKey</td>
-        <td>String</td>
-        <td>Your Cardknox sale-only key</td>
-        <td></td>
-    </tr>
-    <tr>
         <td>xSoftwareName</td>
         <td>String</td>
         <td>Your software name</td>
@@ -88,6 +82,18 @@ This returns a base64 encoded PNG *without the data header*.
         <td>Number</td>
         <td>Transaction amount</td>
         <td></td>
+    </tr>
+    <tr>
+        <td>xInvoice</td>
+        <td>String</td>
+        <td>Invoice number</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>xStoreId</td>
+        <td>String</td>
+        <td>Store/Clerk/Server ID. <br /> This field can be used to route transactions.<br /> Contact Support for more details</td>
+        <td>Max length of 8 (truncated)</td>
     </tr>
     <tr>
         <td>settings</td>
@@ -127,12 +133,12 @@ This returns a base64 encoded PNG *without the data header*.
         <td>IP port of your device. Default is "10009"</td>
         <td></td>
     </tr>
-    <tr>
+    <!-- <tr>
         <td>deviceSerialNumber</td>
         <td>String</td>
         <td>Device serial number. Required <strong>if</strong> deviceIpAddress is not provided</td>
         <td></td>
-    </tr>
+    </tr> -->
     <tr>
         <td>deviceIpProtocol</td>
         <td>String</td>
