@@ -5,20 +5,7 @@ import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRA
 
 /**
  * 
- * @typedef TransactionCommandRequest
- * @property {string} xCommand
- * @property {number} xAmount
- * @property {number} xTip
- * @property {string} xInvoice
- * @property {bool} enablePin
- * @property {string} xZip
- * @property {string} xStreet
- * @property {string} xStoreId
- */
-
-/**
- * 
- * @param {TransactionCommandRequest} request 
+ * @param {import('../index').TransactionCommandRequest} request 
  */
 export function getTransactionCommand(request) {
 

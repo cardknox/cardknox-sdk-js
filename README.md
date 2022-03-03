@@ -93,7 +93,13 @@ This returns a base64 encoded PNG *without the data header*.
         <td>xStoreId</td>
         <td>String</td>
         <td>Store/Clerk/Server ID. <br /> This field can be used to route transactions.<br /> Contact Support for more details</td>
-        <td>Max length of 8 (truncated)</td>
+        <td>Max length of 4 (will be truncated)</td>
+    </tr>
+    <tr>
+        <td>xAllowDuplicate</td>
+        <td>Boolean</td>
+        <td>If true, host will not check for duplicate</td>
+        <td></td>
     </tr>
     <tr>
         <td>settings</td>
