@@ -92,7 +92,7 @@ This returns a base64 encoded PNG *without the data header*.
     <tr>
         <td>xStoreId</td>
         <td>String</td>
-        <td>Store/Clerk/Server ID. <br /> This field can be used to support multi-merchant use cases.<br /> Contact Support for more details</td>
+        <td>Store/Clerk/Server ID. <br /> This field can be used to support multi-merchant use cases.<br /> Contact <a href="https://www.cardknox.com/contact/integration-question/">Support</a> for more details</td>
         <td>Max length of 4 (will be truncated)</td>
     </tr>
     <tr>
