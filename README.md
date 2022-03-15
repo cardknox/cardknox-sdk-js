@@ -121,12 +121,6 @@ This returns a base64 encoded PNG *without the data header*.
         <th>Description</th>
         <th>Valid values</th>
     </tr>
-    <!-- <tr>
-        <td>deviceName</td>
-        <td>String</td>
-        <td>Name of your device. Only Pax devices are supported</td>
-        <td></td>
-    </tr> -->
     <tr>
         <td>deviceIpAddress</td>
         <td>String</td>
@@ -139,12 +133,6 @@ This returns a base64 encoded PNG *without the data header*.
         <td>IP port of your device. Default is "10009"</td>
         <td></td>
     </tr>
-    <!-- <tr>
-        <td>deviceSerialNumber</td>
-        <td>String</td>
-        <td>Device serial number. Required <strong>if</strong> deviceIpAddress is not provided</td>
-        <td></td>
-    </tr> -->
     <tr>
         <td>deviceIpProtocol</td>
         <td>String</td>
