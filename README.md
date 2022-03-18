@@ -90,9 +90,9 @@ This returns a base64 encoded PNG *without the data header*.
         <td></td>
     </tr>
     <tr>
-        <td>xStoreId</td>
+        <td>xCustom02</td>
         <td>String</td>
-        <td>Store/Clerk/Server ID. <br /> This field can be used to support multi-merchant use cases.<br /> Contact <a href="https://www.cardknox.com/contact/integration-question/">Support</a> for more details</td>
+        <td>Custom data</td>
         <td>Max length of 4 (will be truncated)</td>
     </tr>
     <tr>
