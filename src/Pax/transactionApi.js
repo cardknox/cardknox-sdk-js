@@ -27,7 +27,7 @@ export function getTransactionCommand(request) {
     if (['T00'].includes(command))
         payload.push(getAVSInformation(request, transactionType));
 
-    payload.push(request.xStoreId);
+    payload.push(request.xCustom02);
 
     if (['T00'].includes(command))
         payload.push(FS + FS);

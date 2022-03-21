@@ -11,7 +11,7 @@ import { Device, DeviceIpReader, IpDeviceCommunicator } from './Device'
  * @property {bool} enablePin
  * @property {string} xZip
  * @property {string} xStreet
- * @property {string} xStoreId
+ * @property {string} xCustom02
  */
 
 /**

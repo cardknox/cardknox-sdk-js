@@ -44,6 +44,6 @@ export default class CardReader {
         request.xCity = request.xCity || '';
         request.xEmail = request.xEmail || '';
         request.xRefnum = request.xRefnum || 0;
-        request.xStoreId = request.xStoreId.substring(0, Math.min(request.xStoreId.length, 4));
+        request.xCustom02 = request.xCustom02.substring(0, Math.min(request.xCustom02.length, 4));
     }
 }
