@@ -6,6 +6,10 @@ export default class CardReader {
         this.ipDeviceCommunicator = ipDeviceCommunicator;
     }
 
+    /**
+     * 
+     * @param {import('../index').TransactionCommandRequest} request 
+     */
     async process(request) {
         try {
             this.validate(request);
@@ -22,6 +26,10 @@ export default class CardReader {
         }
     }
 
+    /**
+     * 
+     * @param {import('../index').TransactionCommandRequest} request 
+     */
     validate(request) {
         //TODO: handle string '0'
         request.xInvoice = request.xInvoice || '';
@@ -36,5 +44,6 @@ export default class CardReader {
         request.xCity = request.xCity || '';
         request.xEmail = request.xEmail || '';
         request.xRefnum = request.xRefnum || 0;
+        request.xCustom02 = request.xCustom02.substring(0, Math.min(request.xCustom02.length, 4));
     }
 }

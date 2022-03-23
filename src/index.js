@@ -3,7 +3,20 @@ import { Device, DeviceIpReader, IpDeviceCommunicator } from './Device'
 
 /**
  * 
- * @param {TransactionRequest} request 
+ * @typedef TransactionCommandRequest
+ * @property {string} xCommand
+ * @property {number} xAmount
+ * @property {number} xTip
+ * @property {string} xInvoice
+ * @property {bool} enablePin
+ * @property {string} xZip
+ * @property {string} xStreet
+ * @property {string} xCustom02
+ */
+
+/**
+ * 
+ * @param {TransactionCommandRequest} request 
  */
 export async function process(request) {
     try {

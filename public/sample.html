@@ -53,7 +53,8 @@
         .container {
             padding: 16px;
         }
-        #response{
+
+        #response {
             word-wrap: break-word;
         }
     </style>
@@ -80,21 +81,6 @@
             <div class="col-md-6 col-lg-offset-2 col-lg-5">
                 <h2>Payment</h2>
 
-                <label for="xAmount"><strong>Amount</strong></label>
-                <input type="text" name="xAmount" value="1.99" />
-
-                <label for="xTax"><strong>Tax</strong></label>
-                <input type="text" name="xTax" value="0.04" />
-
-                <label for="psw"><strong>Invoice</strong></label>
-                <input type="text" name="xInvoice" value="12345" />
-                <input type="hidden" name="xStreet" value="123 Main St" />
-                <input type="hidden" name="xZip" value="11111" />
-                <input type="hidden" name="xKey" value="" />
-                <input type="hidden" name="xSoftwareName" value="test" />
-                <input type="hidden" name="xSoftwareVersion" value="1" />
-                <input type="hidden" name="xVersion" value="4.5.5" />
-
                 <select name="xCommand">
                     <option value="cc:sale">Sale</option>
                     <option value="cc:void">Void</option>
@@ -103,6 +89,31 @@
                 </select>
                 <input type="submit" value="Initiate" />
                 <button id="signature">Get Signature</button>
+
+                <div>
+                    <label for="xAmount"><strong>Amount</strong></label>
+                    <input type="text" name="xAmount" value="1.99" />
+
+                    <label for="xTax"><strong>Tax</strong></label>
+                    <input type="text" name="xTax" value="0.04" />
+
+                    <label for="xInvoice"><strong>Invoice</strong></label>
+                    <input type="text" name="xInvoice" value="12345" />
+
+                    <label for="xCustom02"><strong>Custom</strong></label>
+                    <input type="text" maxlength="4" name="xCustom02" value="1" />
+
+                    <br />
+                    <div>
+                        <label for="xAllowDuplicate"><strong>Allow Duplicate</strong></label>
+                        <br />
+                        <input type="checkbox" name="xAllowDuplicate" />
+                    </div>
+
+                    <input type="hidden" name="xSoftwareName" value="test" />
+                    <input type="hidden" name="xSoftwareVersion" value="1" />
+                    <input type="hidden" name="xVersion" value="4.5.5" />
+                </div>
             </div>
         </form>
         <img src="" alt="" id="sigimage">
@@ -140,7 +151,7 @@
                     deviceIpProtocol: config.deviceIpProtocol
                 }
             })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r))
-            .catch(console.error);
+                .catch(console.error);
         });
 
         var signatureButton = document.getElementById('signature');

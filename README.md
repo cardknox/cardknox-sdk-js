@@ -60,12 +60,6 @@ This returns a base64 encoded PNG *without the data header*.
         <th>Valid values</th>
     </tr>
     <tr>
-        <td>xKey</td>
-        <td>String</td>
-        <td>Your Cardknox sale-only key</td>
-        <td></td>
-    </tr>
-    <tr>
         <td>xSoftwareName</td>
         <td>String</td>
         <td>Your software name</td>
@@ -90,6 +84,24 @@ This returns a base64 encoded PNG *without the data header*.
         <td></td>
     </tr>
     <tr>
+        <td>xInvoice</td>
+        <td>String</td>
+        <td>Invoice number</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>xCustom02</td>
+        <td>String</td>
+        <td>Custom data</td>
+        <td>Max length of 4 (will be truncated)</td>
+    </tr>
+    <tr>
+        <td>xAllowDuplicate</td>
+        <td>Boolean</td>
+        <td>If true, host will not check for duplicate</td>
+        <td></td>
+    </tr>
+    <tr>
         <td>settings</td>
         <td>Settings</td>
         <td>Transaction settings, these should be the same for all transactions</td>
@@ -109,12 +121,6 @@ This returns a base64 encoded PNG *without the data header*.
         <th>Description</th>
         <th>Valid values</th>
     </tr>
-    <!-- <tr>
-        <td>deviceName</td>
-        <td>String</td>
-        <td>Name of your device. Only Pax devices are supported</td>
-        <td></td>
-    </tr> -->
     <tr>
         <td>deviceIpAddress</td>
         <td>String</td>
@@ -125,12 +131,6 @@ This returns a base64 encoded PNG *without the data header*.
         <td>deviceIpPort</td>
         <td>String</td>
         <td>IP port of your device. Default is "10009"</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>deviceSerialNumber</td>
-        <td>String</td>
-        <td>Device serial number. Required <strong>if</strong> deviceIpAddress is not provided</td>
         <td></td>
     </tr>
     <tr>

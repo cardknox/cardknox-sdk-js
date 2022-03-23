@@ -5,19 +5,7 @@ import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRA
 
 /**
  * 
- * @typedef TransactionCommandRequest
- * @property {string} xCommand
- * @property {number} xAmount
- * @property {number} xTip
- * @property {string} xInvoice
- * @property {bool} enablePin
- * @property {string} xZip
- * @property {string} xStreet
- */
-
-/**
- * 
- * @param {TransactionCommandRequest} request 
+ * @param {import('../index').TransactionCommandRequest} request 
  */
 export function getTransactionCommand(request) {
 
@@ -37,9 +25,14 @@ export function getTransactionCommand(request) {
     ];
 
     if (['T00'].includes(command))
-        payload.push(getAVSInformation(request, transactionType) + FS + FS + FS + FS);
-    else
+        payload.push(getAVSInformation(request, transactionType));
+
+    payload.push(request.xCustom02);
+
+    if (['T00'].includes(command))
         payload.push(FS + FS);
+    else
+        payload.push(FS);
 
     const payloadString = payload.join(FS);
     return STX_ETX_LRC(payloadString);
