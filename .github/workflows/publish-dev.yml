@@ -27,3 +27,5 @@ jobs:
         aws-region: us-west-2
     - run: npm ci
     - run: node publish dev
+      env:
+        BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
