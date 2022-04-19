@@ -5,6 +5,10 @@
 
 ### JS SDK v1.0 - Change Log
 
+#### [1.0.2204.0601-beta] - 2022-04-06
+- Added xCustom02 parameter
+- Remove tax for gift
+
 #### [1.0.2111.1801-beta] - 2021-11-18
 - Convert IP address to domain using 'mylocaldevice.com' when using _https_
 
