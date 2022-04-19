@@ -1,6 +1,7 @@
 {
     "name": "cardknox-sdk-js",
     "version": "1.0.2201.1601",
+    "releaseChannel": "alpha",
     "description": "",
     "main": "dist/index.min.js",
     "scripts": {
