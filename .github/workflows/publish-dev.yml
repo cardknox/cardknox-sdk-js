@@ -26,4 +26,4 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
     - run: npm ci
-    - run: node publish tst
+    - run: node publish dev
