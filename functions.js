@@ -6,35 +6,6 @@ const { Transform } = require('stream');
 
 /**
  * 
- * @typedef Version
- * @property {string} major
- * @property {string} minor
- * @property {string} patch
- * @property {string} deployment - Is empty when deployment is 'stable'
- * @property {() => string} getFullVersion
- */
-
-/**
- * 
- * Relies on 'package.json' for the version number (including the date and id portion)
- * @param {string} deployment
- * @returns {Version}
- */
-function getVersion(deployment) {
-  const versionNumber = require('./package.json').version;
-  const parts = versionNumber.split('.');
-  const patch = `${parts[2]}.${parts[3]}`;
-  return {
-    major: parts[0],
-    minor: parts[1],
-    patch,
-    deployment,
-    getFullVersion: () => `${parts[0]}.${parts[1]}.${patch}${deployment ? '-' + deployment : ''}`
-  };
-}
-
-/**
- * 
  * Uses webpack to build the project
  * Will reject on errors or warnings; error result will contain the errors or warnings
  * @param webpackConfig
@@ -49,6 +20,23 @@ function buildProjectAsync(webpackConfig) {
       if (stats.hasErrors() || stats.hasWarnings())
         reject(info);
       resolve(info);
+    });
+  });
+}
+
+/**
+ * 
+ * @param {string} changelogPath 
+ * @param {string} version 
+ * @returns {Promise<boolean>}
+ */
+function changelogHasVersion(changelogPath, version) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(changelogPath, (err, data) => {
+      if (err)
+        reject(err);
+      else
+        resolve(data.toString().includes(version))
     });
   });
 }
@@ -73,13 +61,30 @@ function generateHtmlChangelog(source, destination) {
 
 /**
  * 
- * @typedef {import('aws-sdk').S3.PutObjectRequest} PutObjectRequest
+ * @typedef {import('aws-sdk').S3.PutObjectOutput} PutObjectOutput
  */
 
 /**
  * 
  * @typedef {import('aws-sdk').S3} S3
  */
+
+/**
+ * 
+ * @param {S3} s3 
+ * @param {string} version 
+ * @param {string} bucketName 
+ * @param {string} s3Dir 
+ * @returns {Promise<boolean>}
+ * @returns 
+ */
+async function versionExistsAsync(s3, version, bucketName, s3Dir) {
+  const response = await s3.listObjectsV2({
+    Bucket: bucketName,
+    Prefix: `${s3Dir}/${version}`
+  }).promise();
+  return !!response.Contents.length;
+}
 
 /**
  * 
@@ -93,7 +98,7 @@ function generateHtmlChangelog(source, destination) {
  * 
  * @param {S3} s3
  * @param {UploadOptions} options
- * @returns {Promise<PutObjectRequest>} Promise resulting with the response
+ * @returns {Promise<PutObjectOutput>} Promise resulting with the response
  * @throws AWS.AWSError
  */
 async function uploadLocalFileAsync(s3, options) {
@@ -162,9 +167,10 @@ function getContentType(fileName) {
 }
 
 module.exports = {
-  getVersion,
   buildProjectAsync,
   generateHtmlChangelog,
+  changelogHasVersion,
   uploadLocalFileAsync,
-  fileExistsAsync
+  fileExistsAsync,
+  versionExistsAsync
 }

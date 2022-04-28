@@ -117,3 +117,6 @@ public/scripts
 .yarn/install-state.gz
 .pnp.*
 public/cardknox-sdk.min.js
+
+# added
+changelog_*.html

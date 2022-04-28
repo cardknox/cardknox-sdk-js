@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const webpackConfig = require('./webpack.prod.config');
-const { getVersion, buildProjectAsync, generateHtmlChangelog, uploadLocalFileAsync, fileExistsAsync } = require('./functions');
+const { buildProjectAsync, generateHtmlChangelog, uploadLocalFileAsync, fileExistsAsync, versionExistsAsync, changelogHasVersion } = require('./functions');
 const S3DIR = 'sdk-js';
 
 (async function () {
@@ -8,25 +8,40 @@ const S3DIR = 'sdk-js';
     console.log(`Environment: ${process.argv[2]}`);
     if (!process.argv[2])
       throw new Error('Missing environment');
-    const bucketName = ''; //TODO: retrieve bucket name
-    const version = getVersion(process.argv[3]);
-    const changelogName = `changelog_${version.major}.${version.minor}`;
-    console.log('Building project')
+    const bucketName = process.argv[2] + process.env.BUCKET_NAME;
+
+    let { version, releaseChannel } = require('./package.json');
+    if (releaseChannel)
+      version += '-' + releaseChannel;
+    console.log('Version: ' + version)
+
+    console.log('Checking if version exists')
+    const S3 = new AWS.S3({ apiVersion: '2006-03-01' });
+    if (await versionExistsAsync(S3, version, bucketName, S3DIR)) {
+      console.log(`Version ${version} found, exiting`);
+      return;
+    }
+    console.log('Version not found, continuing with publish')
+
+    console.log('Building project');
     const stats = await buildProjectAsync(webpackConfig);
     console.log('Build complete\n', stats);
+
     console.log('Generating change log');
+    const [major, minor] = version.split('.');
+    const changelogName = `changelog_${major}.${minor}`;
+    const changelogUpdated = await changelogHasVersion(changelogName + '.md', version);
+    if (!changelogUpdated)
+      throw new Error('Missing changelog');
     generateHtmlChangelog(changelogName + '.md', changelogName + '.html');
     console.log('Change log generated');
 
     const filesToUpload = [
-      { localPath: './dist/cardknox-sdk.min.js', key: `${version.getFullVersion()}/cardknox-sdk.min.js` },
-      { localPath: './public/sample.html', key: `${version.getFullVersion()}/sample.html` },
+      { localPath: './dist/cardknox-sdk.min.js', key: `${version}/cardknox-sdk.min.js` },
+      { localPath: './public/sample.html', key: `${version}/sample.html` },
       { localPath: './versions.html', key: `versions.html` },
       { localPath: `./${changelogName}.html`, key: `${changelogName}.html` }
     ];
-
-    //TODO: retrieve AWS credentials
-    const S3 = new AWS.S3({ apiVersion: '2006-03-01' });
     console.log('Uploading to CDN');
     await Promise.all(filesToUpload.map(async item => {
       if (!(await fileExistsAsync(item.localPath)))
