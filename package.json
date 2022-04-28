@@ -1,8 +1,20 @@
 {
     "name": "cardknox-sdk-js",
     "version": "1.0.2201.1601",
-    "description": "",
+    "description": "A library for communicating with Cardknox supported terminals and the Cardknox Gateway",
     "main": "dist/index.min.js",
+    "license": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cardknox/cardknox-sdk-js.git"
+    },
+    "author": {
+        "email": "developersupport@cardknox.com"
+    },
+    "bugs": {
+        "url": "https://www.cardknox.com/contact/",
+        "email": "developersupport@cardknox.com"
+    },
     "scripts": {
         "test": "echo \"TODO: create test\" && exit 0",
         "start": "start http://lh.cardknox.com:4000/sample.html && start light-server -s public -p 4000 -w \"public/**\" && npm run watch",
@@ -10,7 +22,6 @@
         "build-dev": "webpack --config webpack.dev.config.js",
         "build": "webpack --config webpack.prod.config.js"
     },
-    "author": "",
     "dependencies": {
         "@babel/runtime": "^7.10.4",
         "is-ip": "^3.1.0",
@@ -31,7 +42,7 @@
         "eslint-loader": "^4.0.2",
         "light-server": "^2.7.0",
         "showdown": "^1.9.1",
-        "webpack": "^4.43.0",
-        "webpack-cli": "^3.3.12"
+        "webpack": "^5.72.0",
+        "webpack-cli": "^4.9.2"
     }
 }
