@@ -16,7 +16,7 @@ function buildProjectAsync(webpackConfig) {
     webpack(webpackConfig, (err, stats) => {
       if (err)
         reject(err);
-      const info = stats.toString('summary');
+      const info = stats.toString();
       if (stats.hasErrors() || stats.hasWarnings())
         reject(info);
       resolve(info);
