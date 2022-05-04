@@ -5,10 +5,6 @@
 
 ### JS SDK v1.0 - Change Log
 
-#### [1.0.2205.0401-alpha] - 2022-04-06
-- Added xCustom02 parameter
-- Remove tax for gift
-
 #### [1.0.2204.0601-beta] - 2022-04-06
 - Added xCustom02 parameter
 - Remove tax for gift
