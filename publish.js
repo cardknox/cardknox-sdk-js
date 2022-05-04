@@ -58,5 +58,6 @@ const S3DIR = 'sdk-js';
     console.log('Upload complete');
   } catch (error) {
     console.error(error);
+    throw error;
   }
 })();
