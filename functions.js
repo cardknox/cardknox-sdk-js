@@ -30,7 +30,7 @@ function buildProjectAsync(webpackConfig) {
  * @param {string} version 
  * @returns {Promise<boolean>}
  */
-function changelogHasVersion(changelogPath, version) {
+function changelogHasVersionAsync(changelogPath, version) {
   return new Promise((resolve, reject) => {
     fs.readFile(changelogPath, (err, data) => {
       if (err)
@@ -46,17 +46,21 @@ function changelogHasVersion(changelogPath, version) {
  * @param {string} source - File path of source
  * @param {string} destination - File path of destination
  */
-function generateHtmlChangelog(source, destination) {
+function generateHtmlChangelogAsync(source, destination) {
   const showdown = new (require('showdown').Converter)({ completeHTMLDocument: true, noHeaderId: true });
   showdown.setFlavor('github');
-  fs.createReadStream(source)
-    .pipe(new Transform({
-      transform: (chunk, encoding, done) => {
-        const result = showdown.makeHtml(chunk.toString());
-        done(null, result);
-      }
-    }))
-    .pipe(fs.createWriteStream(destination));
+  return new Promise((resolve, reject) => {
+    const fileStream = fs.createReadStream(source)
+      .pipe(new Transform({
+        transform: (chunk, encoding, done) => {
+          const result = showdown.makeHtml(chunk.toString());
+          done(null, result);
+        }
+      }))
+      .pipe(fs.createWriteStream(destination));
+    fileStream.on('finish', () => resolve());
+    fileStream.on('error', reject);
+  });
 }
 
 /**
@@ -168,8 +172,8 @@ function getContentType(fileName) {
 
 module.exports = {
   buildProjectAsync,
-  generateHtmlChangelog,
-  changelogHasVersion,
+  generateHtmlChangelogAsync,
+  changelogHasVersionAsync,
   uploadLocalFileAsync,
   fileExistsAsync,
   versionExistsAsync
