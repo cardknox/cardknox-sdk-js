@@ -8,7 +8,6 @@ import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRA
  * @param {import('../index').TransactionCommandRequest} request 
  */
 export function getTransactionCommand(request) {
-
     const command = getCommand(request);
     const transactionType = getTransactionType(request);
     const amountInfo = getAmountInfo(request, transactionType, command);
