@@ -129,7 +129,6 @@ function getAmountInfo({ xAmount, xTax, xTip }, transactionType, command) {
                 case '01':
                 case '02':
                     return formatAmount(xAmount);
-                // case '16':
                 case '23':
                     return '';
                 default:
