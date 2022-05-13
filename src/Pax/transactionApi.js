@@ -102,7 +102,7 @@ function getAmountInfo({ xAmount, xTax, xTip }, transactionType, command) {
                         formatAmount(xTax)
                     ].join(US);
                 case '03':
-                    return formatAmount(xAmount);
+                    return formatAmount(xAmount).toString();
                 case '23':
                     return '';
                 default:
@@ -118,7 +118,7 @@ function getAmountInfo({ xAmount, xTax, xTip }, transactionType, command) {
                 case '02':
                 case '03':
                 case '05':
-                    return formatAmount(xAmount);
+                    return formatAmount(xAmount).toString();
                 case '23':
                     return '';
                 default:
@@ -128,7 +128,7 @@ function getAmountInfo({ xAmount, xTax, xTip }, transactionType, command) {
             switch (transactionType) {
                 case '01':
                 case '02':
-                    return formatAmount(xAmount);
+                    return formatAmount(xAmount).toString();
                 case '23':
                     return '';
                 default:
@@ -146,7 +146,7 @@ function getAmountInfo({ xAmount, xTax, xTip }, transactionType, command) {
                 case '02':
                 case '03':
                 case '10':
-                    return formatAmount(xAmount);
+                    return formatAmount(xAmount).toString();
                 case '23':
                     return '';
                 default:
