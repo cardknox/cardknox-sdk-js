@@ -5,7 +5,6 @@
     <title>SDK Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="cardknox-sdk.min.js"></script>
@@ -31,6 +30,10 @@
             display: inline-block;
             border: 1px solid #ccc;
             box-sizing: border-box;
+        }
+        input[type=checkbox] {
+            margin-right: 5px;
+            transform: translate(0, -2px);
         }
 
         input[type=submit],
@@ -63,6 +66,8 @@
 <body>
 
     <div class="container">
+        <img src="" alt="" id="sigimage">
+        <p id="response"></p>
 
         <form action="" id="config">
             <div class="col-md-6 col-lg-5">
@@ -94,6 +99,9 @@
                     <label for="xAmount"><strong>Amount</strong></label>
                     <input type="text" name="xAmount" value="1.99" />
 
+                    <label for="xTip"><strong>Tip</strong></label>
+                    <input type="text" name="xTip" value="0.30" />
+
                     <label for="xTax"><strong>Tax</strong></label>
                     <input type="text" name="xTax" value="0.04" />
 
@@ -105,9 +113,8 @@
 
                     <br />
                     <div>
-                        <label for="xAllowDuplicate"><strong>Allow Duplicate</strong></label>
-                        <br />
                         <input type="checkbox" name="xAllowDuplicate" />
+                        <label for="xAllowDuplicate"><strong>Allow Duplicate</strong></label>
                     </div>
 
                     <input type="hidden" name="xSoftwareName" value="test" />
@@ -116,8 +123,6 @@
                 </div>
             </div>
         </form>
-        <img src="" alt="" id="sigimage">
-        <p id="response"></p>
     </div>
 
     <script>

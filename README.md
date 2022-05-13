@@ -80,7 +80,19 @@ This returns a base64 encoded PNG *without the data header*.
     <tr>
         <td>xAmount</td>
         <td>Number</td>
-        <td>Transaction amount</td>
+        <td>Transaction amount. Format is $.CC</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>xTax</td>
+        <td>Number</td>
+        <td>Tax amount included in the transaction amount. Format is $.CC</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>xTip</td>
+        <td>Number</td>
+        <td>Tip amount included in the transaction amount.  Format is $.CC</td>
         <td></td>
     </tr>
     <tr>
