@@ -30,8 +30,8 @@ const S3DIR = 'sdk-js';
     console.log('Generating change log');
     const [major, minor] = version.split('.');
     const changelogName = `changelog_${major}.${minor}`;
-    const changelogUpdated = await changelogHasVersionAsync(changelogName + '.md', version);
-    if (!changelogUpdated)
+    const changelogRequired = releaseChannel !== 'alpha' && !(await changelogHasVersionAsync(changelogName + '.md', version));
+    if (changelogRequired)
       throw new Error('Missing changelog');
     await generateHtmlChangelogAsync(changelogName + '.md', changelogName + '.html');
     console.log('Change log generated');
