@@ -25,23 +25,6 @@ function buildProjectAsync(webpackConfig) {
 }
 
 /**
- * 
- * @param {string} changelogPath 
- * @param {string} version 
- * @returns {Promise<boolean>}
- */
-function changelogHasVersionAsync(changelogPath, version) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(changelogPath, (err, data) => {
-      if (err)
-        reject(err);
-      else
-        resolve(data.toString().includes(version))
-    });
-  });
-}
-
-/**
  * Transforms a Markdown changelog to html using the 'showdown' module
  * @param {string} source - File path of source
  * @param {string} destination - File path of destination
@@ -173,7 +156,6 @@ function getContentType(fileName) {
 module.exports = {
   buildProjectAsync,
   generateHtmlChangelogAsync,
-  changelogHasVersionAsync,
   uploadLocalFileAsync,
   fileExistsAsync,
   versionExistsAsync

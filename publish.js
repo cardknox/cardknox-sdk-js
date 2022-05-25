@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const webpackConfig = require('./webpack.prod.config');
-const { buildProjectAsync, generateHtmlChangelogAsync, uploadLocalFileAsync, fileExistsAsync, versionExistsAsync, changelogHasVersionAsync } = require('./functions');
+const { buildProjectAsync, generateHtmlChangelogAsync, uploadLocalFileAsync, fileExistsAsync, versionExistsAsync } = require('./functions');
 const S3DIR = 'sdk-js';
 
 (async function () {
@@ -30,9 +30,6 @@ const S3DIR = 'sdk-js';
     console.log('Generating change log');
     const [major, minor] = version.split('.');
     const changelogName = `changelog_${major}.${minor}`;
-    const changelogRequired = releaseChannel !== 'alpha' && !(await changelogHasVersionAsync(changelogName + '.md', version));
-    if (changelogRequired)
-      throw new Error('Missing changelog');
     await generateHtmlChangelogAsync(changelogName + '.md', changelogName + '.html');
     console.log('Change log generated');
 
