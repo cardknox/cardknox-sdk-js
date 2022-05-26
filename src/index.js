@@ -7,7 +7,6 @@ import { Device, DeviceIpReader, IpDeviceCommunicator } from './Device'
  * @property {string} xCommand
  * @property {number} xAmount
  * @property {number} xTip
- * @property {number} xTax
  * @property {string} xInvoice
  * @property {string} xZip
  * @property {string} xStreet
