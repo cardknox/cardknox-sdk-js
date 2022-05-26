@@ -80,8 +80,14 @@ This returns a base64 encoded PNG *without the data header*.
     <tr>
         <td>xAmount</td>
         <td>Number</td>
-        <td>Transaction amount</td>
-        <td></td>
+        <td>Transaction amount.</td>
+        <td>Format: #.##</td>
+    </tr>
+    <tr>
+        <td>xTip</td>
+        <td>Number</td>
+        <td>Tip amount included in the transaction amount.</td>
+        <td>Format: #.##</td>
     </tr>
     <tr>
         <td>xInvoice</td>
