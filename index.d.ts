@@ -14,7 +14,6 @@ declare interface TransactionRequest {
     xCommand: string;
     xAmount: number;
     xTip: number;
-    xTax: number;
     xInvoice: string;
     xCustom02: string;
     xAllowDuplicate: boolean;
