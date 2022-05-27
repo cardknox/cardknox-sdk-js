@@ -8,7 +8,6 @@ import { API_VERSION, RESPONSECODE_OK, RESPONSECODE_DECLINE, RESPONSECODE_DUPTRA
  * @param {import('../index').TransactionCommandRequest} request 
  */
 export function getTransactionCommand(request) {
-
     const command = getCommand(request);
     const transactionType = getTransactionType(request);
     const amountInfo = getAmountInfo(request, transactionType, command);
@@ -38,7 +37,7 @@ export function getTransactionCommand(request) {
     return STX_ETX_LRC(payloadString);
 }
 
-function getCommand({ xCommand }, enablePin) {
+function getCommand({ xCommand, enablePin }) {
     if (xCommand.toLowerCase().indexOf('cc') >= 0)
         if (enablePin)
             return 'T02';
@@ -69,10 +68,6 @@ function getTransactionType({ xCommand }) {
             return '05';        // forced
         case ENUM_COMMAND_TYPE.GIFT_ISSUE:
             return "10"; // issue
-        case ENUM_COMMAND_TYPE.CC_VOID:
-        case ENUM_COMMAND_TYPE.CC_VOIDRELEASE:
-        case ENUM_COMMAND_TYPE.CC_VOIDREFUND:
-            return "16"; // void
         case ENUM_COMMAND_TYPE.CC_BALANCE:
         case ENUM_COMMAND_TYPE.EBTFS_BALANCE:
         case ENUM_COMMAND_TYPE.EBTCB_BALANCE:
@@ -84,38 +79,79 @@ function getTransactionType({ xCommand }) {
     throw new Error('Unsupported command: ' + xCommand);
 }
 
-function getAmountInfo({ xAmount, xTax }, transactionType, command) {
-    switch (transactionType) {
-        case '01':
-        case '04':
-        case '05': {
-            const info = [
-                formatAmount(xAmount),
-                '',                             // tip
-                '',                             // cashback
-                ''                              // fee
-            ];
-            if (command != 'T06')
-                info.push(formatAmount(xTax));
-            return info.join(US);
-        }
-        case '03':
-            return formatAmount(xAmount);
-        case '02':
-            return formatAmount(xAmount);
-        case '06':
-            return formatAmount(xAmount);
-        case '10':
-            return formatAmount(xAmount);
-        case '16':
-        case '18':
-        case '19':
-        case '20':
-        case '21':
-        case '23':
-        case '24':
-            return '';
-        // case '38':               // TRANSACTION ADJUSTMENT
+function getAmountInfo({ xAmount, xTax, xTip }, transactionType, command) {
+    switch (command) {
+        case 'T00':
+            switch (transactionType) {
+                case '01':
+                case '04':
+                case '05':
+                    return [
+                        formatAmount(xAmount),
+                        formatAmount(xTip),
+                        '',                     //cashback
+                        '',                     //merchant fee
+                        formatAmount(xTax)
+                    ].join(US);
+                case '02':
+                    return [
+                        formatAmount(xAmount),
+                        '',
+                        '',
+                        '',
+                        formatAmount(xTax)
+                    ].join(US);
+                case '03':
+                    return formatAmount(xAmount).toString();
+                case '23':
+                    return '';
+                default:
+                    return '';
+            }
+        case 'T02':
+            switch (transactionType) {
+                case '01':
+                    return [
+                        formatAmount(xAmount),
+                        formatAmount(xTip)
+                    ].join(US);
+                case '02':
+                case '03':
+                case '05':
+                    return formatAmount(xAmount).toString();
+                case '23':
+                    return '';
+                default:
+                    return '';
+            }
+        case 'T04':
+            switch (transactionType) {
+                case '01':
+                case '02':
+                    return formatAmount(xAmount).toString();
+                case '23':
+                    return '';
+                default:
+                    return '';
+            }
+        case 'T06':
+            switch (transactionType) {
+                case '01':
+                case '04':
+                case '05':
+                    return [
+                        formatAmount(xAmount),
+                        formatAmount(xTip)
+                    ].join(US);
+                case '02':
+                case '03':
+                case '10':
+                    return formatAmount(xAmount).toString();
+                case '23':
+                    return '';
+                default:
+                    return '';
+            }
         default:
             return '';
     }

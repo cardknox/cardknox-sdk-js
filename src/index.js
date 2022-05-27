@@ -8,7 +8,6 @@ import { Device, DeviceIpReader, IpDeviceCommunicator } from './Device'
  * @property {number} xAmount
  * @property {number} xTip
  * @property {string} xInvoice
- * @property {bool} enablePin
  * @property {string} xZip
  * @property {string} xStreet
  * @property {string} xCustom02

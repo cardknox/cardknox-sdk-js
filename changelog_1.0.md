@@ -5,6 +5,9 @@
 
 ### JS SDK v1.0 - Change Log
 
+#### [1.0.2205.2701-stable] - 2022-05-27
+- Promote to stable
+
 #### [1.0.2204.0601-beta] - 2022-04-06
 - Added xCustom02 parameter
 - Remove tax for gift
