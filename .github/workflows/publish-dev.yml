@@ -2,9 +2,6 @@ name: publish-dev
 
 on: 
   workflow_dispatch:
-  push:
-    branches:
-      - 'rc/*/*/*'
 
 jobs:
   publish:
