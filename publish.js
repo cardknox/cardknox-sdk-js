@@ -10,7 +10,8 @@ const S3DIR = 'sdk-js';
       throw new Error('Missing environment');
     const bucketName = process.argv[2] + process.env.BUCKET_NAME;
 
-    let { version, releaseChannel } = require('./package.json');
+    let { coreVersion, buildRevision, releaseChannel } = require('./package.json');
+    let version = coreVersion + buildRevision;
     if (releaseChannel)
       version += '-' + releaseChannel;
     console.log('Version: ' + version)
