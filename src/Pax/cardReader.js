@@ -36,6 +36,7 @@ export default class CardReader {
         request.xStreet = request.xStreet || '';
         request.xZip = request.xZip || '';
         request.xTip = request.xTip || '';
+        request.xAmount -= request.xTip;
         request.xTax = request.xTax || '';
         request.xExp = request.xExp || '';
         request.xAllowDuplicate = !!request.xAllowDuplicate;
