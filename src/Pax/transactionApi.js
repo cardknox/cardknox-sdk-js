@@ -223,7 +223,7 @@ function getAVSInformation({ xZip, xStreet }, command) {
 }
 
 function formatAmount(amount) {
-    return Math.round(amount * 100);
+    return amount ? Math.round(amount * 100) : amount;
 }
 
 export class TransactionResponse {
