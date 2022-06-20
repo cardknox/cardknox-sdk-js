@@ -16,7 +16,7 @@ const S3DIR = 'sdk-js';
       version += '-' + releaseChannel;
     console.log('Version: ' + version)
 
-    console.log('Checking if version exists')
+    console.log('Checking if version exists');
     const S3 = new AWS.S3({ apiVersion: '2006-03-01' });
     if (await versionExistsAsync(S3, version, bucketName, S3DIR)) {
       console.log(`Version ${version} found, exiting`);
