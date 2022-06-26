@@ -5,7 +5,7 @@
 
 ### JS SDK v1.0 - Change Log
 
-#### [1.0.2206.0101-stable] - 2022-06-01
+#### [1.0.2206.2101-stable] - 2022-06-21
 - Include tip in amount
 
 #### [1.0.2205.2701-stable] - 2022-05-27
