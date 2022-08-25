@@ -37,7 +37,6 @@ const S3DIR = 'sdk-js';
     const filesToUpload = [
       { localPath: './dist/cardknox-sdk.min.js', key: `${version}/cardknox-sdk.min.js` },
       { localPath: './public/sample.html', key: `${version}/sample.html` },
-      { localPath: './versions.html', key: `versions.html` },
       { localPath: `./${changelogName}.html`, key: `${changelogName}.html` }
     ];
     console.log('Uploading to CDN');
