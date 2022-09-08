@@ -7,7 +7,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'cardknox-sdk.min.js',
-        libraryTarget: 'window'
+        libraryTarget: 'umd',
+        library: 'cardknoxSDK',
     },
     plugins: [
         new CleanWebpackPlugin()
