@@ -30,9 +30,9 @@ export default class IpDeviceCommunicator {
     getData = async (command) => {
         try {
             const response = await fetch(`${this.protocol}//${this.ip}:${this.port}?${command}`);
-            if (!response.ok)
-                throw response;
-
+            if (!response.ok) {
+                throw await response.text();
+            }
             const responseReader = response.body.getReader();
 
             let chunk = await readAll(responseReader, new Uint8Array());
