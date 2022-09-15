@@ -42,6 +42,7 @@
         "copy-webpack-plugin": "^6.0.3",
         "eslint": "^7.4.0",
         "eslint-loader": "^4.0.2",
+        "filemanager-webpack-plugin": "^7.0.0",
         "light-server": "^2.7.0",
         "showdown": "^1.9.1",
         "webpack": "^5.72.0",

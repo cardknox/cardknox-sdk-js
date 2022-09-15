@@ -8,6 +8,7 @@
         "browser": true
     },
     "globals": {
-        "Uint8Array": true
+        "Uint8Array": true,
+        "__dirname": true
     }
 }
