@@ -166,7 +166,8 @@
 
             getSignature({
                 deviceIpAddress: config.deviceIpAddress,
-                deviceIpPort: config.deviceIpPort
+                deviceIpPort: config.deviceIpPort,
+                deviceIpProtocol: config.deviceIpProtocol
             }).then(r => {
                 if (!r.xError)
                     document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
