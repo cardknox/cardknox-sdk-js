@@ -10,7 +10,7 @@ To avoid the need for a self-signed certificate, Cardknox provides a SSL certifi
 
 A DNS entry must exist, mapping the host name to the IP address. The SDK will check that the entry exists if there are network errors.
 
-To create a DNS entry, use the tool located [here](http://localdevice.us-west-2.elasticbeanstalk.com/). This can also be done via API.
+To create a DNS entry, use the tool located [here](https://us-east-2.localdevice.cardknox.com/). This can also be done via API.
 
 ```
 curl --request POST \
