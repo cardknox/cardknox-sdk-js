@@ -65,17 +65,6 @@ export async function getSignature(request) {
     }
 }
 
-export function cancel(request) {
-    try {
-        const ipReader = new DeviceIpReader(request);
-        const device = new Device();
-        device.cancel(new IpDeviceCommunicator(ipReader.getIP(), request.deviceIpPort, 'http'));
-    } catch (error) {
-        console.error(error)
-        throw error;
-    }
-}
-
 const inProgress = {};
 
 function updateInProgress(ip, device) {
