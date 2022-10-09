@@ -169,8 +169,10 @@
                 deviceIpPort: config.deviceIpPort,
                 deviceIpProtocol: config.deviceIpProtocol
             }).then(r => {
-                if (!r.xError)
+                if (!r.xError){
                     document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
+                    document.getElementById("response").innerHTML = '';
+                }
                 else
                     document.getElementById("response").innerHTML = JSON.stringify(r);
             }).catch(console.error);
