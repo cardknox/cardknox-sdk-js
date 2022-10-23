@@ -6,7 +6,7 @@
     "releaseChannel": "alpha",
     "description": "A library for communicating with Cardknox supported terminals and the Cardknox Gateway",
     "main": "dist/cardknox-sdk.min.js",
-    "license": "",
+    "license": "GPL-3.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/cardknox/cardknox-sdk-js.git"
