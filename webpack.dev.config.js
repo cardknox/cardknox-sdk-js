@@ -1,12 +1,16 @@
 const config = require('./webpack.config');
 
-const CopyPlugin = require('copy-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 config.plugins.push(
-    new CopyPlugin({
-        patterns: [
-            { from: 'dist', to: '../public' },
-        ],
+    new FileManagerPlugin({
+        events: {
+            onEnd: {
+              copy: [
+                { source: 'dist', destination: 'public' },
+              ]
+            }
+        }
     })
 );
 
