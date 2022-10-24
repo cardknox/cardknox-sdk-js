@@ -1,9 +1,9 @@
 {
     "name": "cardknox-sdk-js",
-    "version": "1.1.2209.2001",
+    "version": "1.1.2210.2401",
     "coreVersion": "1.1",
-    "buildRevision": ".2209.1301",
-    "releaseChannel": "alpha",
+    "buildRevision": ".2210.2401",
+    "releaseChannel": "stable",
     "description": "A library for communicating with Cardknox supported terminals and the Cardknox Gateway",
     "main": "dist/cardknox-sdk.min.js",
     "license": "",
