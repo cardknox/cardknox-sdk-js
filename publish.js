@@ -12,7 +12,7 @@ const S3DIR = 'sdk-js';
 
     let { coreVersion, buildRevision, releaseChannel } = require('./package.json');
     let version = coreVersion + buildRevision;
-    if (releaseChannel)
+    if (releaseChannel && releaseChannel !== 'stable')
       version += '-' + releaseChannel;
     console.log('Version: ' + version)
 
