@@ -2,6 +2,8 @@
 
 ## SDK
 
+A library for communicating with Cardknox supported terminals and the Cardknox Gateway
+
 ### HTTPS
 
 To enable _https_ on the Pax device, please contact [support](mailto:support@cardkox.com).
