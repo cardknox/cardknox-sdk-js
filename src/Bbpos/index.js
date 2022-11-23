@@ -1,10 +1,9 @@
+import { IpDeviceCommunicator } from "../Device";
+import { inProgressMessage, progressEnd, updateInProgress } from "../Device/inProgress";
+import { default as CardReader } from "./cardReader";
 
-import SignatureReader from './signatureReader';
-import { inProgressMessage, progressEnd, updateInProgress } from '../Device/inProgress';
-import CardReader from './cardReader';
-import { IpDeviceCommunicator } from '../Device';
-
-export default class Pax {
+export { CardReader };
+export default class Bbpos {
 
   /**
    * 
@@ -30,25 +29,32 @@ export default class Pax {
     }
   }
 
+  /**
+   * 
+   * @param {import('../index').DeviceSettings} request 
+   * @returns {Promise<String>} base64-encoded PNG
+   * @description returns the image *without* the data header
+   */
+  static getSignature = async (request) => {
+    const response = await this.process(Object.assign({}, { settings: request }, { xCommand: 'Device_GetSignature' }));
+    if (response.xError)
+      return response;
+    return response.xDeviceData;
+  }
 
   /**
-  * 
-  * @param {import('../index').DeviceSettings} request 
-  * @returns {Promise<String>} base64-encoded PNG
-  * @description returns the image *without* the data header
-  */
-  static async getSignature(request) {
+   * 
+   * @param {import('../index').DeviceSettings} request 
+   * @returns {Promise<String>} base64-encoded PNG
+   * @description returns the image *without* the data header
+   */
+  static async cancel(request) {
     try {
-      const device = new SignatureReader(
+      const device = new CardReader(
         new IpDeviceCommunicator(request.deviceIpAddress, request.deviceIpPort, request.deviceIpProtocol || location.protocol)
       );
-      updateInProgress(request.deviceIpAddress);
-      const response = await device.getSignature();
-      progressEnd(request.deviceIpAddress);
-      return response;
+      return await device.process({ xCancel: true });
     } catch (error) {
-      if (error.message !== inProgressMessage)
-        progressEnd(request.deviceIpAddress);
       return {
         xResult: "E",
         xStatus: "Error",

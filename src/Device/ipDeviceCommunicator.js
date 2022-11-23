@@ -24,12 +24,39 @@ export default class IpDeviceCommunicator {
 
     /**
      * 
-     * @param {string} command 
+     * @param {string} query 
      * @returns {Promise<string>}
      */
-    getData = async (command) => {
+    getData = async (query) => {
         try {
-            const response = await fetch(`${this.protocol}//${this.ip}:${this.port}?${command}`);
+            const response = await fetch(`${this.protocol}//${this.ip}:${this.port}?${query}`);
+            if (!response.ok) {
+                throw await response.text();
+            }
+            const responseReader = response.body.getReader();
+
+            let chunk = await readAll(responseReader, new Uint8Array());
+
+            chunk = chunk ? new TextDecoder('utf-8').decode(chunk) : '';
+            return chunk;
+        } catch (error) {
+            console.error(error);
+            // await this.tryRegisterIp(); //TODO: Enable once LOCAL_DEVICE_TOOL_URL endpoint is available
+            throw error;
+        }
+    }
+
+    /**
+     * 
+     * @param {string} data 
+     * @returns {Promise<string>}
+     */
+    postData = async (data) => {
+        try {
+            const response = await fetch(`${this.protocol}//${this.ip}:${this.port}`, {
+                method: 'POST',
+                body: data
+            });
             if (!response.ok) {
                 throw await response.text();
             }

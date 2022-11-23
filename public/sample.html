@@ -31,6 +31,7 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
+
         input[type=checkbox] {
             margin-right: 5px;
             transform: translate(0, -2px);
@@ -49,7 +50,8 @@
         }
 
         input[type=submit]:hover,
-        #signature:hover {
+        #signature:hover,
+        button:hover {
             opacity: 0.8;
         }
 
@@ -69,8 +71,8 @@
         <img src="" alt="" id="sigimage">
         <p id="response"></p>
 
-        <form action="" id="config">
-            <div class="col-md-6 col-lg-5">
+        <div class="col-md-6 col-lg-5">
+            <form action="" id="config">
                 <h2>Configuration</h2>
                 <label for="deviceIpAddress">IP Address</label>
                 <input type="text" name="deviceIpAddress" id="deviceIpAddress" />
@@ -78,8 +80,14 @@
                 <input type="text" name="deviceIpPort" id="deviceIpPort" />
                 <label for="deviceIpProtocol">Protocol</label>
                 <input type="text" name="deviceIpProtocol" id="deviceIpProtocol" />
-            </div>
-        </form>
+            </form>
+
+            <h2>Device Type</h2>
+            <select id="deviceType">
+                <option>Bbpos</option>
+                <option>Pax</option>
+            </select>
+        </div>
 
 
         <form id="form">
@@ -94,6 +102,7 @@
                 </select>
                 <input type="submit" value="Initiate" />
                 <button id="signature">Get Signature</button>
+                <button id="cancel">Cancel</button>
 
                 <div>
                     <label for="xAmount"><strong>Amount</strong></label>
@@ -145,8 +154,8 @@
 
             var formData = new FormData(form);
             var config = Object.fromEntries(new FormData(configForm).entries());
-
-            process(Object.assign(Object.fromEntries(formData.entries()), {
+            var deviceType = document.getElementById('deviceType').value;
+            window[deviceType].process(Object.assign(Object.fromEntries(formData.entries()), {
                 settings: {
                     deviceIpAddress: config.deviceIpAddress,
                     deviceIpPort: config.deviceIpPort,
@@ -163,18 +172,32 @@
             document.getElementById("response").innerHTML = "";
             document.getElementById('sigimage').setAttribute('src', '');
             var config = Object.fromEntries(new FormData(configForm).entries());
-
-            getSignature({
+            var deviceType = document.getElementById('deviceType').value;
+            window[deviceType].getSignature({
                 deviceIpAddress: config.deviceIpAddress,
                 deviceIpPort: config.deviceIpPort,
                 deviceIpProtocol: config.deviceIpProtocol
             }).then(r => {
-                if (!r.xError){
+                if (!r.xError) {
                     document.getElementById('sigimage').setAttribute('src', 'data:image/png;base64,' + r);
-                    document.getElementById("response").innerHTML = '';
                 }
                 else
                     document.getElementById("response").innerHTML = JSON.stringify(r);
+            }).catch(console.error);
+        });
+
+        var cancelButton = document.getElementById('cancel');
+        cancelButton.addEventListener('click', e => {
+            e.preventDefault();
+
+            document.getElementById("response").innerHTML = "";
+            document.getElementById('sigimage').setAttribute('src', '');
+            var config = Object.fromEntries(new FormData(configForm).entries());
+            var deviceType = document.getElementById('deviceType').value;
+            window[deviceType].cancel({
+                deviceIpAddress: config.deviceIpAddress,
+                deviceIpPort: config.deviceIpPort,
+                deviceIpProtocol: config.deviceIpProtocol
             }).catch(console.error);
         });
     </script>
