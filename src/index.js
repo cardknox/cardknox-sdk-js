@@ -1,5 +1,8 @@
+import Bbpos from "./Bbpos";
 import Pax from "./Pax";
 export { default as Bbpos } from "./Bbpos";
+export const PaxDeviceName = 'pax';
+export const BbposDeviceName = 'bbpos';
 
 /**
  * 
@@ -20,10 +23,26 @@ export { default as Bbpos } from "./Bbpos";
  * @property {string} deviceIpAddress
  * @property {string} deviceIpPort
  * @property {'http' | 'https'} deviceIpProtocol
+ * @property {string} deviceName
  */
 
-export const process = Pax.process;
+/**
+ * 
+ * @param {TransactionCommandRequest} request
+ */
+export const process = (request) => {
+    if (!request || !request.settings) {
+        throw new Error('request.settings is required')  
+    }
+    switch (request.settings.deviceName) {
+        case BbposDeviceName:
+            return Bbpos.process(request);
+        default:
+            return Pax.process(request);
+    }
+}
 export const getSignature = Pax.getSignature;
+
 
 export {
     Pax

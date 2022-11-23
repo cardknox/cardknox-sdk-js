@@ -84,8 +84,8 @@
 
             <h2>Device Type</h2>
             <select id="deviceType">
-                <option>Bbpos</option>
-                <option>Pax</option>
+                <option value="bbpos">Bbpos</option>
+                <option value="pax">Pax </option>
             </select>
         </div>
 
@@ -155,11 +155,12 @@
             var formData = new FormData(form);
             var config = Object.fromEntries(new FormData(configForm).entries());
             var deviceType = document.getElementById('deviceType').value;
-            window[deviceType].process(Object.assign(Object.fromEntries(formData.entries()), {
+            process(Object.assign(Object.fromEntries(formData.entries()), {
                 settings: {
                     deviceIpAddress: config.deviceIpAddress,
                     deviceIpPort: config.deviceIpPort,
-                    deviceIpProtocol: config.deviceIpProtocol
+                    deviceIpProtocol: config.deviceIpProtocol,
+                    deviceName: deviceType
                 }
             })).then(r => document.getElementById("response").innerHTML = JSON.stringify(r))
                 .catch(console.error);
