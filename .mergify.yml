@@ -1,22 +1,18 @@
 queue_rules:
   - name: default
-    conditions:
-      - label!=donotmerge
-      - label!=wip
-      - label!=pending base merge
-
-pull_request_rules:
-  - name: Update and Merge
-    conditions:
+    queue_conditions:
       - "#approved-reviews-by>=1"
       - -label~=required
       - label!=donotmerge
       - label!=wip
       - label!=pending base merge
-    actions:
-      queue:
-        name: default
-        method: squash
+    merge_conditions:
+      - label!=donotmerge
+      - label!=wip
+      - label!=pending base merge
+    merge_method: squash
+
+pull_request_rules:
   - name: remove all 'required' labels
     conditions:
       - "#approved-reviews-by=0"
@@ -137,7 +133,7 @@ pull_request_rules:
       - label=backport to last rc
     actions:
       backport:
-        branches:       
+        branches:
           - rc/2021/12/01-2.33
   - name: backport to penultimate rc
     conditions:
@@ -148,7 +144,7 @@ pull_request_rules:
         branches:
           - rc/2021/11/03-2.32
   - name: message on build check failure
-    conditions: 
+    conditions:
       - check-failure=build
       - -closed
     actions:
@@ -177,10 +173,14 @@ pull_request_rules:
   - name: remove label on pending base merge
     conditions:
       - or:
-        - base=master
-        - base~=^rc/*/*/*
+          - base=master
+          - base~=^rc/*/*/*
       - -closed
     actions:
       label:
         remove:
           - pending base merge
+  - name: Update and Merge
+    conditions: []
+    actions:
+      queue:
