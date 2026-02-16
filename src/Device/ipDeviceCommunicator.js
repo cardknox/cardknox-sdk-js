@@ -22,6 +22,24 @@ export default class IpDeviceCommunicator {
         return this.protocol === 'https:';
     }
 
+    buildValidatedUrl(baseUrl, command) {
+        try {
+            const url = new URL(baseUrl);
+            
+            // Validate command parameter
+            if (!/^[A-Za-z0-9_-]+$/.test(command)) {
+                throw new Error('Invalid parameter');
+            }
+            
+            // Add query parameter
+            url.searchParams.set('command', command);
+            
+            return url.href;
+        } catch {
+            throw new Error('Invalid URL');
+        }
+    }
+
     /**
      * 
      * @param {string} command 
@@ -29,7 +47,9 @@ export default class IpDeviceCommunicator {
      */
     getData = async (command) => {
         try {
-            const response = await fetch(`${this.protocol}//${this.ip}:${this.port}?${command}`);
+            const baseUrl = `${this.protocol}//${this.ip}:${this.port}`;
+            const validatedUrl = this.buildValidatedUrl(baseUrl, command);
+            const response = await fetch(validatedUrl);
             if (!response.ok) {
                 throw await response.text();
             }
