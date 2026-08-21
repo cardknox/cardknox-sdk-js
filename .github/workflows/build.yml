@@ -1,28 +1,131 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# Clean install of node dependencies, build the source code and run tests.
+#
+# Every dependency install in this workflow is gated by Aikido Safe Chain, which
+# proxies the npm registry and blocks packages flagged as malware by Aikido Intel
+# before their tarballs (and their install scripts) ever reach the runner.
+# Docs: https://github.com/AikidoSec/safe-chain
 
 name: build
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Version the publish workflows release from. Keep in sync with
+  # publish-dev.yml / publish-prd.yml.
+  NODE_VERSION: 16.x
+  # Pinned to an immutable GitHub release asset and checksum-verified on download.
+  # Bump both values together: https://github.com/AikidoSec/safe-chain/releases
+  SAFE_CHAIN_VERSION: 1.5.15
+  SAFE_CHAIN_SHA256: de0565e3d6346407a604e84e639e95fea8758748063da2216bbfdca5feda5dd2
 
 jobs:
-  build:
+  # Supply-chain gate. Resolves and downloads the entire dependency tree through
+  # Safe Chain, so a malicious package in package-lock.json fails here and stops
+  # the build and test jobs from ever running it.
+  safe-chain:
+    name: safe-chain
+    runs-on: ubuntu-latest
 
+    steps:
+      - uses: actions/checkout@v4
+
+      # Deliberately no npm cache: the gate must fetch every tarball through the
+      # Safe Chain proxy rather than replaying a warm ~/.npm from an earlier run.
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Must run after setup-node so the Safe Chain shims are prepended to PATH
+      # ahead of the Node toolchain's own npm.
+      - name: Install Aikido Safe Chain
+        run: |
+          curl -fsSL "https://github.com/AikidoSec/safe-chain/releases/download/${SAFE_CHAIN_VERSION}/install-safe-chain.sh" -o /tmp/install-safe-chain.sh
+          echo "${SAFE_CHAIN_SHA256}  /tmp/install-safe-chain.sh" | sha256sum -c -
+          sh /tmp/install-safe-chain.sh --ci
+          rm /tmp/install-safe-chain.sh
+
+      # PATH updates from the step above only apply to subsequent steps.
+      - name: Report Safe Chain version
+        run: safe-chain --version
+
+      # Proves the gate is armed. Without this, a Safe Chain install that silently
+      # failed to hook npm would leave every check below passing for no reason.
+      - name: Verify Safe Chain blocks a known-malicious package
+        run: |
+          mkdir -p "${RUNNER_TEMP}/safe-chain-canary"
+          cd "${RUNNER_TEMP}/safe-chain-canary"
+          npm init -y > /dev/null
+          if npm install safe-chain-test --no-audit --no-fund; then
+            echo "::error::Aikido Safe Chain did not block the safe-chain-test canary package - the supply-chain gate is NOT active."
+            exit 1
+          fi
+          echo "Safe Chain blocked the canary package as expected."
+
+      - name: Install dependencies through Safe Chain
+        run: npm ci
+
+  # 16.x is the version publish-prd.yml releases from; 20.x is there to tell us
+  # whether the publish workflows can safely be bumped to a supported LTS.
+  build:
+    needs: safe-chain
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [ 16.x, 20.x ]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
+
+  test:
+    needs: safe-chain
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+  # Single stable check for branch protection and mergify to require. Matrix jobs
+  # report one check per leg ("build (16.x)", "build (20.x)") and none for the job
+  # as a whole, so this job is what "the build passed" actually means.
+  #
+  # `if: always()` is required. Without it a failed upstream job would skip this
+  # one entirely, leaving the check pending forever instead of reporting red.
+  build-complete:
+    name: build-complete
+    needs: [ safe-chain, build, test ]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check upstream job results
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: |
+          echo "::error::One or more required jobs did not succeed (safe-chain=${{ needs.safe-chain.result }}, build=${{ needs.build.result }}, test=${{ needs.test.result }})."
+          exit 1
+      - run: echo "safe-chain, build and test all succeeded."
