@@ -1,3 +1,11 @@
+merge_protections:
+  - name: build workflow must pass
+    description: The build workflow must succeed, including the Aikido Safe Chain supply-chain gate, before a pull request can be merged.
+    if:
+      - base=master
+    success_conditions:
+      - check-success=build-complete
+
 queue_rules:
   - name: default
     queue_conditions:
@@ -145,7 +153,7 @@ pull_request_rules:
           - rc/2021/11/03-2.32
   - name: message on build check failure
     conditions:
-      - check-failure=build
+      - check-failure=build-complete
       - -closed
     actions:
       label:
@@ -155,7 +163,7 @@ pull_request_rules:
         message: "Pull request #{{ number }} has failed the build check @{{author}}"
   - name: remove build failed
     conditions:
-      - check-success=build
+      - check-success=build-complete
       - -closed
     actions:
       label:
