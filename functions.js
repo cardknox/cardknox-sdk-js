@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const { Transform } = require('stream');
+const { ListObjectsV2Command, PutObjectCommand } = require('@aws-sdk/client-s3');
 
 /**
  * 
@@ -48,12 +49,12 @@ function generateHtmlChangelogAsync(source, destination) {
 
 /**
  * 
- * @typedef {import('aws-sdk').S3.PutObjectOutput} PutObjectOutput
+ * @typedef {import('@aws-sdk/client-s3').PutObjectCommandOutput} PutObjectOutput
  */
 
 /**
  * 
- * @typedef {import('aws-sdk').S3} S3
+ * @typedef {import('@aws-sdk/client-s3').S3Client} S3
  */
 
 /**
@@ -66,11 +67,12 @@ function generateHtmlChangelogAsync(source, destination) {
  * @returns 
  */
 async function versionExistsAsync(s3, version, bucketName, s3Dir) {
-  const response = await s3.listObjectsV2({
+  const response = await s3.send(new ListObjectsV2Command({
     Bucket: bucketName,
     Prefix: `${s3Dir}/${version}`
-  }).promise();
-  return !!response.Contents.length;
+  }));
+  // v3 omits Contents when nothing matches
+  return !!(response.Contents && response.Contents.length);
 }
 
 /**
@@ -86,18 +88,18 @@ async function versionExistsAsync(s3, version, bucketName, s3Dir) {
  * @param {S3} s3
  * @param {UploadOptions} options
  * @returns {Promise<PutObjectOutput>} Promise resulting with the response
- * @throws AWS.AWSError
+ * @throws S3ServiceException
  */
 async function uploadLocalFileAsync(s3, options) {
   try {
     const contents = await readFileAsync(options.localPath);
-    return await s3.putObject({
+    return await s3.send(new PutObjectCommand({
       Bucket: options.bucketName,
       Key: options.key,
       Body: contents,
       ServerSideEncryption: 'AES256',
       ContentType: getContentType(options.localPath)
-    }).promise();
+    }));
   } catch (error) {
     console.error(error);
     throw error;
