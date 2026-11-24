@@ -6,15 +6,29 @@ merge_protections:
     success_conditions:
       - check-success=build-complete
 
+# master's branch protection requires branches to be up to date before merging,
+# so the queue must test each pull request on its own branch, one at a time
+# (in-place checks). A draft-PR queue would leave the original branch out of
+# date and GitHub would refuse the merge.
+merge_queue:
+  max_parallel_checks: 1
+  mode: serial
+
 queue_rules:
   - name: default
+    batch_size: 1
+    max_checks_retries: 0
     queue_conditions:
       - "#approved-reviews-by>=1"
       - -label~=required
       - label!=donotmerge
       - label!=wip
       - label!=pending base merge
+    # Must match queue_conditions exactly; differing conditions turn on
+    # two-step CI, which needs a draft PR and breaks in-place checks.
     merge_conditions:
+      - "#approved-reviews-by>=1"
+      - -label~=required
       - label!=donotmerge
       - label!=wip
       - label!=pending base merge
