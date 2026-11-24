@@ -49,6 +49,9 @@
         "webpack-cli": "^4.9.2"
     },
     "overrides": {
-        "serve-static": "^1.16.0"
+        "serve-static": "^1.16.0",
+        "globule": {
+            "minimatch": "^3.1.3"
+        }
     }
 }
