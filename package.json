@@ -47,5 +47,8 @@
         "showdown": "^1.9.1",
         "webpack": "^5.72.0",
         "webpack-cli": "^4.9.2"
+    },
+    "overrides": {
+        "serve-static": "^1.16.0"
     }
 }
