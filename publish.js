@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const { S3Client } = require('@aws-sdk/client-s3');
 const webpackConfig = require('./webpack.prod.config');
 const { buildProjectAsync, generateHtmlChangelogAsync, uploadLocalFileAsync, fileExistsAsync, versionExistsAsync } = require('./functions');
 const S3DIR = 'sdk-js';
@@ -17,7 +17,7 @@ const S3DIR = 'sdk-js';
     console.log('Version: ' + version)
 
     console.log('Checking if version exists');
-    const S3 = new AWS.S3({ apiVersion: '2006-03-01' });
+    const S3 = new S3Client({});
     if (await versionExistsAsync(S3, version, bucketName, S3DIR)) {
       console.log(`Version ${version} found, exiting`);
       return;
